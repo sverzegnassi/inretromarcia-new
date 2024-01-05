@@ -22,6 +22,12 @@ export default singleton({
                 label: "Lingua predefinita",
                 description: "Specificare il codice ISO per la lingua predefinita del sito.",
             }),
+            titleDelimiter: fields.text({
+                label: "Delimitatore del titolo",
+                description:
+                  "Consente di impostare il carattere delimitatore tra il titolo della pagina e il titolo del sito nella tag <title> della pagina, visibile nelle schede del browser.",
+                defaultValue: "|",
+              }),
         }, {
             label: "Generale",
             description: "Configurazione generale per il sito web"
