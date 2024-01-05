@@ -3,6 +3,7 @@ import collection_GuideAllAcquisto from './src/keystatic/collections/guide-all-a
 import collection_CoreaDelSud from './src/keystatic/collections/corea-del-sud'
 import collection_SchemaOrg from './src/keystatic/collections/schemas'
 import singleton_WebsiteConfig from './src/keystatic/singletons/website-config'
+import singleton_Redirects from  './src/keystatic/singletons/redirects'
 
 import React from 'react';
 
@@ -24,7 +25,7 @@ export default config({
         navigation: {
             "Contenuti": [ 'acquisto', 'coreaDelSud' ],
             "Meta": [ 'schemaOrg' ],
-            "Configurazione": [ 'websiteConfig' ],
+            "Configurazione": [ 'websiteConfig', 'redirects' ],
         }
     },
     collections: {
@@ -34,5 +35,6 @@ export default config({
     },
     singletons: {
         websiteConfig: singleton_WebsiteConfig,
+        redirects: singleton_Redirects,
     }
 });

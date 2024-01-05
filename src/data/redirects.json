@@ -1,0 +1,144 @@
+{
+  "redirects": [
+    {
+      "source": "/corea-del-sud/informazioni-utili/applicazioni/",
+      "destination": "/corea-del-sud/applicazioni/",
+      "code": ""
+    },
+    {
+      "source": "/corea-del-sud/informazioni-utili/applicazioni/applicazioni-utili-corea",
+      "destination": "/corea-del-sud/applicazioni/applicazioni-utili-corea",
+      "code": ""
+    },
+    {
+      "source": "/corea-del-sud/informazioni-utili/clima-stagioni/",
+      "destination": "/corea-del-sud/clima-stagioni/",
+      "code": ""
+    },
+    {
+      "source": "/corea-del-sud/informazioni-utili/clima-stagioni/beotkkot-fioritura-ciliegi-sakura",
+      "destination": "/corea-del-sud/clima-stagioni/beotkkot-fioritura-ciliegi-sakura",
+      "code": ""
+    },
+    {
+      "source": "/corea-del-sud/informazioni-utili/clima-stagioni/jangma-stagione-piogge-corea",
+      "destination": "/corea-del-sud/clima-stagioni/jangma-stagione-piogge-corea",
+      "code": ""
+    },
+    {
+      "source": "/corea-del-sud/informazioni-utili/come-comportarsi-al-ristorante",
+      "destination": "/corea-del-sud/come-comportarsi-al-ristorante",
+      "code": ""
+    },
+    {
+      "source": "/corea-del-sud/informazioni-utili/consigli-strada-citt%C3%A0",
+      "destination": "/corea-del-sud/consigli-strada-citt%C3%A0",
+      "code": ""
+    },
+    {
+      "source": "/corea-del-sud/dove-andare/",
+      "destination": "/corea-del-sud/luoghi/",
+      "code": ""
+    },
+    {
+      "source": "/corea-del-sud/dove-andare/seoul/",
+      "destination": "/corea-del-sud/luoghi/seoul/",
+      "code": ""
+    },
+    {
+      "source": "/corea-del-sud/dove-andare/seoul/gangnam-jamsil-apgujeong",
+      "destination": "/corea-del-sud/luoghi/seoul/gangnam-jamsil-apgujeong",
+      "code": ""
+    },
+    {
+      "source": "/corea-del-sud/dove-andare/seoul/hongdae",
+      "destination": "/corea-del-sud/luoghi/seoul/hongdae",
+      "code": ""
+    },
+    {
+      "source": "/corea-del-sud/dove-andare/seoul/itaewon-yongsan",
+      "destination": "/corea-del-sud/luoghi/seoul/itaewon-yongsan",
+      "code": ""
+    },
+    {
+      "source": "/corea-del-sud/cosa-fare/parchi-seoul/",
+      "destination": "/corea-del-sud/luoghi/seoul/poi/parchi/",
+      "code": ""
+    },
+    {
+      "source": "/corea-del-sud/cosa-fare/parchi-seoul/banpo-hangang-park",
+      "destination": "/corea-del-sud/luoghi/seoul/poi/parchi/banpo-hangang-park",
+      "code": ""
+    },
+    {
+      "source": "/corea-del-sud/cosa-fare/parchi-seoul/olympic-park-songpa",
+      "destination": "/corea-del-sud/luoghi/seoul/poi/parchi/olympic-park-songpa",
+      "code": ""
+    },
+    {
+      "source": "/corea-del-sud/cosa-fare/parchi-seoul/seokchon-lake-park-jamsil",
+      "destination": "/corea-del-sud/luoghi/seoul/poi/parchi/seokchon-lake-park-jamsil",
+      "code": ""
+    },
+    {
+      "source": "/corea-del-sud/cosa-fare/parchi-seoul/yeouido-hangang-park",
+      "destination": "/corea-del-sud/luoghi/seoul/poi/parchi/yeouido-hangang-park",
+      "code": ""
+    },
+    {
+      "source": "/corea-del-sud/dove-andare/seoul/yeouido",
+      "destination": "/corea-del-sud/luoghi/seoul/yeouido",
+      "code": ""
+    },
+    {
+      "source": "/corea-del-sud/informazioni-utili/pagamenti-valuta-locale-won-cambio",
+      "destination": "/corea-del-sud/pagamenti-valuta-locale-won-cambio",
+      "code": ""
+    },
+    {
+      "source": "/corea-del-sud/informazioni-utili/shopping-tax-refund-rimborso-iva",
+      "destination": "/corea-del-sud/shopping-tax-refund-rimborso-iva",
+      "code": ""
+    },
+    {
+      "source": "/corea-del-sud/informazioni-utili/temple-stay",
+      "destination": "/corea-del-sud/temple-stay",
+      "code": ""
+    },
+    {
+      "source": "/corea-del-sud/informazioni-utili/tipi-alloggio-corea",
+      "destination": "/corea-del-sud/tipi-alloggio-corea",
+      "code": ""
+    },
+    {
+      "source": "/corea-del-sud/informazioni-utili/trasporti/",
+      "destination": "/corea-del-sud/trasporti/",
+      "code": ""
+    },
+    {
+      "source": "/corea-del-sud/informazioni-utili/trasporti/come-arrivare-seoul-da-aeroporto-incheon",
+      "destination": "/corea-del-sud/trasporti/come-arrivare-seoul-da-aeroporto-incheon",
+      "code": ""
+    },
+    {
+      "source": "/corea-del-sud/informazioni-utili/trasporti/tmoney-card",
+      "destination": "/corea-del-sud/trasporti/tmoney-card",
+      "code": ""
+    },
+    {
+      "source": "/corea-del-sud/informazioni-utili/trasporti/trasporti-a-seoul",
+      "destination": "/corea-del-sud/trasporti/trasporti-a-seoul",
+      "code": ""
+    },
+    {
+      "source": "/corea-del-sud/informazioni-utili/visto-ingresso/",
+      "destination": "/corea-del-sud/visto-ingresso/",
+      "code": ""
+    },
+    {
+      "source": "/corea-del-sud/informazioni-utili/visto-ingresso/cosa-e-keta-come-richiederlo",
+      "destination": "/corea-del-sud/visto-ingresso/cosa-e-keta-come-richiederlo",
+      "code": ""
+    }
+  ]
+}
