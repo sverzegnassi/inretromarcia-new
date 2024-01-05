@@ -1,7 +1,7 @@
 import { config } from '@keystatic/core';
 import collection_GuideAllAcquisto from './src/keystatic/collections/guide-all-acquisto'
 import collection_CoreaDelSud from './src/keystatic/collections/corea-del-sud'
-import collection_Categories from './src/keystatic/collections/categories'
+import collection_Tags from './src/keystatic/collections/tags'
 import singleton_WebsiteConfig from './src/keystatic/singletons/website-config'
 import singleton_Redirects from  './src/keystatic/singletons/redirects'
 
@@ -24,14 +24,14 @@ export default config({
         },
         navigation: {
             "Contenuti": [ 'acquisto', 'coreaDelSud' ],
-            "Meta": [ 'categories' ],
+            "Meta": [ 'tags' ],
             "Configurazione": [ 'websiteConfig', 'redirects' ],
         }
     },
     collections: {
         acquisto: collection_GuideAllAcquisto,
         coreaDelSud: collection_CoreaDelSud,
-        categories: collection_Categories
+        tags: collection_Tags
     },
     singletons: {
         websiteConfig: singleton_WebsiteConfig,

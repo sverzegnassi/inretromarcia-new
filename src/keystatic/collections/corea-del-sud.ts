@@ -24,14 +24,14 @@ export default collection({
             description: "Se attivo, il contenuto non verrà pubblicato",
             defaultValue: true,
         }),
-        categories: fields.array(
+        tags: fields.array(
             fields.relationship({
-                label: "Categorie",
-                description: "Categorie in cui apparirà la pagina",
-                collection: 'categories'
+                label: "Tag",
+                description: "Associa parole chiave o categorie specifiche ai tuoi contenuti. I tag aiutano a organizzare e categorizzare il tuo materiale, facilitando la ricerca e la navigazione per gli utenti del tuo sito.",
+                collection: 'tags'
             }),
             {
-                label: "Categorie",
+                label: "Tag",
                 itemLabel: props => props.value ?? "",
             }
         ),

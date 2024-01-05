@@ -2,11 +2,11 @@
 import { fields, collection } from '@keystatic/core';
 
 export default collection({
-    label: "Categorie Post",
+    label: "Tag",
     slugField: 'title',
-    path: 'src/data/schema-org/*',
+    path: 'src/data/tags/*',
     format: { data: "json" },
     schema: {
-        title: fields.slug({name: { label: 'Title' } }),
+        title: fields.slug({name: { label: 'Nome' } }),
     },
 })
