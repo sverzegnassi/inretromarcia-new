@@ -12,7 +12,11 @@ export default singleton({
             }),
             titleLong: fields.text({
                 label: "Titolo per il sito web (Completo)",
-                description: "Il nome del sito web, con una tagline. Viene generalmente utilizzato come tag `meta` per la pagina iniziale."
+                description: "Il nome del sito web, con una tagline. Viene utilizzato come tag `meta` per la pagina iniziale."
+            }),
+            description: fields.text({
+                label: "Meta description predefinita",
+                description: "Verrà utilizzata qualora la pagina non specifichi una propria descrizione."
             }),
             lang: fields.text({
                 label: "Lingua predefinita",
@@ -41,6 +45,14 @@ export default singleton({
         }, {
             label: "Feed RSS",
             description: "Configurazione del feed RSS del sito"
+        }),
+        socials: fields.object({
+            facebook: fields.url({
+                label: "URL della pagina Facebook"
+            }),
+            x: fields.url({
+                label: "URL del profilo X (precedentemente Twitter)"
+            })
         })
     }
 });
