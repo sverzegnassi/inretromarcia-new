@@ -8,13 +8,24 @@ import singleton_Redirects from  './src/keystatic/singletons/redirects'
 
 import React from 'react';
 
+// The content of this file is hard-coded in the output during build.
+// As such, changes to the configuration would be reflected
+// after a new build + deploy has been successfully performed.
+//
+// Not a huge issue with Netlify and Cloudflare adapters (serverless environment),
+// as a change in the repository normally triggers a new build
+// automatically.
+//
+// However, it might be inconvenient when the Node adapter is in use.
+const WebsiteConfig = await import("./src/data/website-config.json")
+
 export default config({
     storage: {
         kind: 'local',
     },
     ui: {
         brand: {
-            name: "In Retromarcia",
+            name: WebsiteConfig.default.general.titleShort ?? "Keystatic",
             mark: ({ colorScheme }) => {
                 let path = colorScheme === 'dark'
                     ? '/favicon.png'
