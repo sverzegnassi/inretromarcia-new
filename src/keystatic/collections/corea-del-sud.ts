@@ -13,8 +13,9 @@ export default collection({
             label: "Estratto / Anteprima dell'articolo",
             multiline: true,
         }),
-        image: fields.image({
-            label: "Immagine cover"
+        image: fields.pathReference({
+            label: "Immagine cover",
+            pattern: 'src/assets/uploads/*'
         }),
         date: fields.datetime({
             label: "Data di pubblicazione"
