@@ -1,5 +1,6 @@
 
 import { fields, collection } from '@keystatic/core';
+import defaultContentField from '../editor/default'
 
 export default collection({
     label: "Corea del Sud",
@@ -13,9 +14,9 @@ export default collection({
             label: "Estratto / Anteprima dell'articolo",
             multiline: true,
         }),
-        image: fields.pathReference({
+        image: fields.image({
             label: "Immagine cover",
-            pattern: 'src/assets/uploads/*'
+            directory: 'src/assets/uploads'
         }),
         date: fields.datetime({
             label: "Data di pubblicazione"
@@ -40,13 +41,7 @@ export default collection({
             label: "Mostra tabella dei contenuti",
             defaultValue: false,
         }),
-        content: fields.document({
-            label: 'Contenuto',
-            formatting: true,
-            dividers: true,
-            links: true,
-            images: true,
-        }),
+        content: defaultContentField({ label: "Contenuto" }),
         meta: fields.object({
             title: fields.text({
                 label: "Meta title",
@@ -70,7 +65,8 @@ export default collection({
         socialCard: fields.object({
             image: fields.image({
                 label: "Immagine",
-                description: "Personalizza l'immagine associata al tuo contenuto quando viene condiviso. Se non fornita, l'Immagine Cover verrà utilizzata."
+                description: "Personalizza l'immagine associata al tuo contenuto quando viene condiviso. Se non fornita, l'Immagine Cover verrà utilizzata.",
+                directory: 'src/assets/uploads'
             }),
             title: fields.text({
                 label: "Titolo della card",

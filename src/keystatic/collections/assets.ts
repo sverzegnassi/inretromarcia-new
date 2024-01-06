@@ -2,9 +2,9 @@
 import { fields, collection } from '@keystatic/core';
 
 export default collection({
-    label: "Risorse multimediali (Asset)",
+    label: "Uploads",
     slugField: 'title',
-    path: 'src/assets/*',
+    path: '/public/uploads/*',
     format: { data: "json" },
     schema: {
         title: fields.slug({
@@ -21,9 +21,10 @@ export default collection({
             label: "Testo alternativo (Alt text)",
             description: "Fornisce una descrizione testuale breve e significativa per le immagini presenti sul sito. Questo testo viene utilizzato dai lettori di schermo e dai motori di ricerca per comprender e interpretare il contenuto visivo. L'utilizzo del testo alternativo migliora l'accessibilità del sito e favorisce una migliore indicizzazione da parte dei motori di ricerca."
         }),
-        file: fields.image({
+        file: fields.file({
             label: "Caricamento file",
-            directory: "src/assets/uploads"
+            directory: "/public/uploads",
+            publicPath: "/uploads/"
         }),
         attribution: fields.object({
             source: fields.text({
