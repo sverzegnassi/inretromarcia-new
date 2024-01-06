@@ -21,7 +21,8 @@ const WebsiteConfig = await import("./src/data/website-config.json")
 
 export default config({
     storage: {
-        kind: 'local',
+        kind: 'github',
+        repo: `sverzegnassi/inretromarcia-new`
     },
     ui: {
         brand: {
