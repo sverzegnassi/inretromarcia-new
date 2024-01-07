@@ -22,10 +22,9 @@ export const LayoutV = (children: ReactElement[]) => {
     }, children);
 }
 
-export type LabelWithCaptionProps = {
-    label: string,
-    caption: string,
-    labelColor?:
+export type LabelProps = {
+    text: string,
+    textColor?:
     | "neutral"
     | "neutralEmphasis"
     | "neutralSecondary"
@@ -41,7 +40,11 @@ export type LabelWithCaptionProps = {
     | "highlight"
 }
 
-export const LabelWithCaption = ({ label, caption, labelColor = "neutral" }: LabelWithCaptionProps) => {
+export type LabelWithCaptionProps = LabelProps & {
+    caption: string,
+}
+
+export const LabelWithCaption = ({ text, caption, textColor = "neutral" }: LabelWithCaptionProps) => {
     return React.createElement(NotEditable, {
         className: css({
             display: 'flex',
@@ -58,9 +61,9 @@ export const LabelWithCaption = ({ label, caption, labelColor = "neutral" }: Lab
     ],
         React.createElement('span', {
             className: css({
-                color: tokenSchema.color.foreground[labelColor],
+                color: tokenSchema.color.foreground[textColor],
             })
-        }, label)
+        }, text)
     )
 }
 

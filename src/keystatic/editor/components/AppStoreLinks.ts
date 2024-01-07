@@ -13,13 +13,13 @@ export default () => {
                 React.createElement('span', null, fields.name.value),
                 LayoutH([
                     LabelWithCaption({
-                        label: fields.googlePlay.value ? "Presente" : "Non presente",
-                        labelColor: fields.googlePlay.value ? "neutral" : "neutralSecondary",
+                        text: fields.googlePlay.value ? "Presente" : "Non presente",
+                        textColor: fields.googlePlay.value ? "neutral" : "neutralSecondary",
                         caption: "Google Play"
                     }),
                     LabelWithCaption({
-                        label: fields.apple.value ? "Presente" : "Non presente",
-                        labelColor: fields.googlePlay.value ? "neutral" : "neutralSecondary",
+                        text: fields.apple.value ? "Presente" : "Non presente",
+                        textColor: fields.googlePlay.value ? "neutral" : "neutralSecondary",
                         caption: "App Store (Apple)"
                     })
                 ])

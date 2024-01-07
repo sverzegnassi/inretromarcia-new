@@ -12,7 +12,7 @@ export default () => {
                 return LayoutH([
                     KeystarIcon(fileIcon),
                     LabelWithCaption({
-                        label: fields.ref.value,
+                        text: fields.ref.value,
                         caption: "Percorso della risorsa selezionata"
                     })
                 ]);
