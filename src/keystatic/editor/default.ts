@@ -1,17 +1,12 @@
-import { NotEditable, component, fields } from "@keystatic/core";
-import { imageIcon } from '@keystar/ui/icon/icons/imageIcon';
-import { fileIcon } from '@keystar/ui/icon/icons/fileIcon';
-import { filePlus2Icon } from '@keystar/ui/icon/icons/filePlus2Icon';
-import { css, tokenSchema } from '@keystar/ui/style';
-import React, { type ReactElement } from "react";
+import { fields } from "@keystatic/core";
+import ImageComponent from "./components/ImageComponent";
+import UploadComponent from "./components/UploadComponent";
 
 type Props = {
     label: string,
 }
 
 export default (props: Props) => {
-
-
     return {
         ...fields.document({
             ...props,
@@ -204,110 +199,8 @@ export default (props: Props) => {
             },
 
             componentBlocks: {
-                upload: component({
-                    preview: ({ fields }) => {
-                        function renderIcon(icon: ReactElement) {
-                            return React.cloneElement(icon, {
-                                className: css({
-                                    width: tokenSchema.size.icon.large,
-                                    height: tokenSchema.size.icon.large,
-                                    fill: "transparent",
-                                    stroke: tokenSchema.color.foreground.neutral,
-                                })
-                            })
-                        }
-
-                        if (fields.ref.value) {
-                            const innerText = React.createElement('div', {
-                                className: css({
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    rowGap: tokenSchema.size.space.xsmall,
-                                })
-                            }, [
-                                React.createElement('span', {
-                                    className: css({
-                                        fontSize: tokenSchema.typography.text.small.size,
-                                        color: tokenSchema.color.foreground.neutralSecondary
-                                    })
-                                }, "Percorso della risorsa selezionata")
-                            ],
-                            React.createElement('span', null, fields.ref.value)
-                            )
-
-                            return React.createElement(NotEditable, {
-                                className: css({
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    columnGap: tokenSchema.size.space.medium
-                                })
-                            }, [renderIcon(fileIcon), innerText]);
-                        }
-
-                        return React.createElement(NotEditable, {
-                            className: css({
-                                display: 'flex',
-                                alignItems: 'center',
-                                columnGap: tokenSchema.size.space.medium
-                            })
-                        }, [
-                            renderIcon(filePlus2Icon),
-                            React.createElement('span', null, "Seleziona un file da incorporare...")
-                        ]);
-                    },
-                    label: "File",
-                    schema: {
-                        ref: fields.relationship({
-                            label: "Percorso della risorsa selezionata",
-                            collection: "uploads"
-                        })
-                    },
-                }),
-
-                image: component({
-                    preview: ({ fields }) => {
-                        if (fields.file.value) {
-                            const objectURL = URL.createObjectURL(new Blob([fields.file.value.data]));
-                            return React.createElement('img', { src: objectURL }, null);
-                        }
-                        
-                        return React.createElement('div', null, "Carica una nuova immagine...");
-                    },
-                    label: "Immagine",
-                    schema: {
-                        file: fields.image({
-                            label: "Percorso risorsa",
-                            directory: "src/assets/uploads",
-                            publicPath: "src/assets/uploads/"
-                        }),
-                        title: fields.text({
-                            label: 'Titolo / Didascalia',
-                            description: "Assegna un titolo significativo o una didascalia descrittiva ai tuoi elementi multimediali come immagini o video.",
-                        }),
-                        alt: fields.text({
-                            label: "Testo alternativo (Alt text)",
-                            description: "Fornisce una descrizione testuale breve e significativa per le immagini presenti sul sito. Questo testo viene utilizzato dai lettori di schermo e dai motori di ricerca per comprender e interpretare il contenuto visivo. L'utilizzo del testo alternativo migliora l'accessibilità del sito e favorisce una migliore indicizzazione da parte dei motori di ricerca."
-                        }),
-                        attribution: fields.object({
-                            source: fields.text({
-                                label: "Fonte",
-                                description: "Consente di specificare la fonte o l'URL da cui proviene l'immagine. Non ha effetti sulla visualizzazione e sulla distribuzione all'interno del sito. Utilizza questo campo per documentare la provenienza delle immagini utilizzate."
-                            }),
-                            author: fields.text({
-                                label: "Autore / Copyright",
-                                description: "Questo campo fornisce riconoscimento all'artista o al creatore dell'immagine e può essere utile per rispettare i diritti d'autore e attribuire correttamente la paternità dell'opera visiva."
-                            }),
-                            license: fields.text({
-                                label: "Licenza",
-                                description: "Specifica la licenza che regola l'utilizzo dell'immagine presente nei tuoi contenuti. Utilizza questa opzione per trasparenza e conformità legale riguardo alle licenze delle immagini utilizzate sul tuo sito."
-                            }),
-                        }, {
-                            label: "Attribuzione",
-                            description: "Consente di fornire riconoscimento e crediti appropriati per il lavoro o il contenuto creativo utilizzato sul tuo sito.",
-                        }),
-                    },
-                    toolbarIcon: imageIcon,
-                })
+                upload: UploadComponent(),
+                image: ImageComponent(),
             }
         })
     }
