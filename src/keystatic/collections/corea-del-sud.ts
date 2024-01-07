@@ -14,10 +14,9 @@ export default collection({
             label: "Estratto / Anteprima dell'articolo",
             multiline: true,
         }),
-        image: fields.image({
+        image: fields.relationship({
             label: "Immagine cover",
-            directory: "src/assets/cover",
-            publicPath: "src/assets/cover/",   // This value is added to the frontmatter and utilized by AstroJS
+            collection: "coverImages"
         }),
         date: fields.datetime({
             label: "Data di pubblicazione"

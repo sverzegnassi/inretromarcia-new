@@ -3,6 +3,7 @@ import collection_GuideAllAcquisto from './src/keystatic/collections/guide-all-a
 import collection_CoreaDelSud from './src/keystatic/collections/corea-del-sud'
 import collection_Tags from './src/keystatic/collections/tags'
 import collection_Uploads from './src/keystatic/collections/uploads'
+import collection_CoverImages from './src/keystatic/collections/cover-images';
 import singleton_WebsiteConfig from './src/keystatic/singletons/website-config'
 import singleton_Redirects from  './src/keystatic/singletons/redirects'
 
@@ -34,9 +35,10 @@ export default config({
                 return React.createElement("img", { src: path, height: 24 })
             },
         },
+        
         navigation: {
             "Contenuti": [ 'acquisto', 'coreaDelSud' ],
-            "Meta": [ 'tags', 'uploads' ],
+            "Meta": [ 'tags', 'coverImages', 'uploads' ],
             "Configurazione": [ 'websiteConfig', 'redirects' ],
         }
     },
@@ -45,6 +47,7 @@ export default config({
         coreaDelSud: collection_CoreaDelSud,
         tags: collection_Tags,
         uploads: collection_Uploads,
+        coverImages: collection_CoverImages,
     },
     singletons: {
         websiteConfig: singleton_WebsiteConfig,
