@@ -19,7 +19,7 @@ export default () => {
                     }),
                     LabelWithCaption({
                         text: fields.apple.value ? "Presente" : "Non presente",
-                        textColor: fields.googlePlay.value ? "neutral" : "neutralSecondary",
+                        textColor: fields.apple.value ? "neutral" : "neutralSecondary",
                         caption: "App Store (Apple)"
                     })
                 ])
