@@ -1,6 +1,7 @@
 import { NotEditable, component, fields, type BasicFormField } from "@keystatic/core";
 import React from "react";
 import { Label, LabelWithCaption } from "./ui-common";
+import { YoutubePreview } from "./ui/YoutubePreview";
 
 type SelectFormField = BasicFormField<string> & {
     options: readonly {
@@ -17,7 +18,7 @@ export default () => {
     return component({
         preview: ({ fields }) => {
             if (!fields.service.discriminant || fields.service.discriminant === "none") {
-                return React.createElement(NotEditable, null, 
+                return React.createElement(NotEditable, null,
                     Label({
                         text: "Specifica il contenuto da incorporare...",
                         textColor: "neutralSecondary"
@@ -30,6 +31,20 @@ export default () => {
                     text: "Configura le impostazioni di incorporamento...",
                     textColor: "caution",
                     caption: getSelectFieldLabel(fields.service.schema.discriminant, fields.service.discriminant)
+                })
+            }
+
+            if (fields.service.discriminant === "youtube") {
+                return React.createElement(YoutubePreview, { youtubeVideoUrl: fields.service.value.value }, null)
+            }
+
+            if (fields.service.discriminant === "x") {
+                // Setting up a proxy to avoid CORS issues when fetching `https://publish.twitter.com/` seems a bit excessive.
+                // Instead, directly return the 𝕏 post URL.
+                return LabelWithCaption({
+                    text: fields.service.value.value,
+                    textColor: "neutralEmphasis",
+                    caption: "Post di 𝕏 (prec. Twitter)"
                 })
             }
 
@@ -50,7 +65,7 @@ export default () => {
                         { label: "HTML", value: 'html' },
                         { label: "Instagram", value: 'instagram' },
                         { label: "Youtube", value: 'youtube' },
-                        { label: "X (prev. Twitter)", value: 'x' },
+                        { label: "X (prec. Twitter)", value: 'x' },
                         { label: "Tiktok", value: 'tiktok' }
                     ],
                     defaultValue: "none"
