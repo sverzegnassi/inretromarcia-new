@@ -2,6 +2,8 @@ import { fields } from "@keystatic/core";
 import ImageComponent from "./components/ImageComponent";
 import UploadComponent from "./components/UploadComponent";
 import AppStoreLinks from "./components/AppStoreLinks";
+import ThirdPartyEmbed from "./components/ThirdPartyEmbed";
+import DevNull from "./components/DevNull";
 
 type Props = {
     label: string,
@@ -203,6 +205,8 @@ export default (props: Props) => {
                 upload: UploadComponent(),
                 image: ImageComponent(),
                 appStoreLinks: AppStoreLinks(),
+                thirdPartyEmbed: ThirdPartyEmbed(),
+                devNull: DevNull(),
             }
         })
     }
