@@ -65,6 +65,8 @@ export default collection({
             })
         }),
         socialCard: fields.object({
+            // TODO: In the current Hugo setup (version 1.0 of the website), social card images are automatically generated.
+            // At some point, such functionality will be re-implemented.
             image: fields.image({
                 label: "Immagine",
                 description: "Personalizza l'immagine associata al tuo contenuto quando viene condiviso. Se non fornita, l'Immagine Cover verrà utilizzata.",
