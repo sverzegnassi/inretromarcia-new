@@ -1,6 +1,7 @@
 import { fields } from "@keystatic/core";
 import ImageComponent from "./components/ImageComponent";
 import UploadComponent from "./components/UploadComponent";
+import AppStoreLinks from "./components/AppStoreLinks";
 
 type Props = {
     label: string,
@@ -201,6 +202,7 @@ export default (props: Props) => {
             componentBlocks: {
                 upload: UploadComponent(),
                 image: ImageComponent(),
+                appStoreLinks: AppStoreLinks(),
             }
         })
     }
