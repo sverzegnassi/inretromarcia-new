@@ -23,7 +23,7 @@ export const LayoutV = (children: ReactElement[]) => {
 }
 
 export const LabelWithCaption = (label: string, caption: string) => {
-    return React.createElement('div', {
+    return React.createElement(NotEditable, {
         className: css({
             display: 'flex',
             flexDirection: 'column',
