@@ -40,6 +40,14 @@ export type LabelProps = {
     | "highlight"
 }
 
+export const Label = ({ text, textColor = "neutral" }: LabelProps) => {
+    return React.createElement('span', {
+        className: css({
+            color: tokenSchema.color.foreground[textColor],
+        })
+    }, text);
+}
+
 export type LabelWithCaptionProps = LabelProps & {
     caption: string,
 }
@@ -51,19 +59,14 @@ export const LabelWithCaption = ({ text, caption, textColor = "neutral" }: Label
             flexDirection: 'column',
             rowGap: tokenSchema.size.space.xsmall,
         })
-    }, [
+    },
         React.createElement('span', {
             className: css({
                 fontSize: tokenSchema.typography.text.small.size,
                 color: tokenSchema.color.foreground.neutralSecondary
             })
-        }, caption)
-    ],
-        React.createElement('span', {
-            className: css({
-                color: tokenSchema.color.foreground[textColor],
-            })
-        }, text)
+        }, caption),
+        Label({ text, textColor })
     )
 }
 
