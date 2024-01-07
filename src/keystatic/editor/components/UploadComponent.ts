@@ -1,9 +1,7 @@
 import { component, fields } from "@keystatic/core";
 import { fileIcon } from '@keystar/ui/icon/icons/fileIcon';
 import { filePlus2Icon } from '@keystar/ui/icon/icons/filePlus2Icon';
-import React from "react";
-import { KeystarIcon, LabelWithCaption, LayoutH } from "./ui-common";
-import { css, tokenSchema } from '@keystar/ui/style';
+import { KeystarIcon, Label, LabelWithCaption, LayoutH } from "./ui-common";
 
 export default () => {
     return component({
@@ -20,11 +18,10 @@ export default () => {
 
             return LayoutH([
                 KeystarIcon(filePlus2Icon),
-                React.createElement('span', {
-                    className: css({
-                        color: tokenSchema.color.foreground.neutralSecondary
-                    })
-                }, "Seleziona un file da incorporare...")
+                Label({
+                    text: "Seleziona un file da incorporare...",
+                    textColor: "neutralSecondary"
+                })
             ]);
         },
         label: "File",

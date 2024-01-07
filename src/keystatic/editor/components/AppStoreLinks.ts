@@ -1,16 +1,24 @@
 import { NotEditable, component, fields } from "@keystatic/core";
-import { LabelWithCaption, LayoutV, LayoutH } from "./ui-common";
+import { Label, LabelWithCaption, LayoutV, LayoutH } from "./ui-common";
 import React from "react";
 
 export default () => {
     return component({
         preview: ({ fields }) => {
             if (!fields.name.value) {
-                return React.createElement(NotEditable, null, "Specifica il nome dell'applicazione")
+                return React.createElement(NotEditable, null,
+                    Label({
+                        text: "Specifica il nome dell'applicazione",
+                        textColor: "caution"
+                    })
+                );
             }
 
             return LayoutV([
-                React.createElement('span', null, fields.name.value),
+                Label({
+                    text: fields.name.value,
+                    textColor: "neutralEmphasis"
+                }),
                 LayoutH([
                     LabelWithCaption({
                         text: fields.googlePlay.value ? "Presente" : "Non presente",
