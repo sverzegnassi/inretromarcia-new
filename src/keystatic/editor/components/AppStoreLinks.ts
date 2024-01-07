@@ -12,8 +12,16 @@ export default () => {
             return LayoutV([
                 React.createElement('span', null, fields.name.value),
                 LayoutH([
-                    LabelWithCaption(fields.googlePlay.value ? "Presente" : "Non presente", "Google Play"),
-                    LabelWithCaption(fields.apple.value ? "Presente" : "Non presente", "App Store (Apple)")
+                    LabelWithCaption({
+                        label: fields.googlePlay.value ? "Presente" : "Non presente",
+                        labelColor: fields.googlePlay.value ? "neutral" : "neutralSecondary",
+                        caption: "Google Play"
+                    }),
+                    LabelWithCaption({
+                        label: fields.apple.value ? "Presente" : "Non presente",
+                        labelColor: fields.googlePlay.value ? "neutral" : "neutralSecondary",
+                        caption: "App Store (Apple)"
+                    })
                 ])
             ]);
         },
