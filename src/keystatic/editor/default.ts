@@ -1,6 +1,9 @@
 import { NotEditable, component, fields } from "@keystatic/core";
 import { imageIcon } from '@keystar/ui/icon/icons/imageIcon';
-import React from "react";
+import { fileIcon } from '@keystar/ui/icon/icons/fileIcon';
+import { filePlus2Icon } from '@keystar/ui/icon/icons/filePlus2Icon';
+import { css, tokenSchema } from '@keystar/ui/style';
+import React, { type ReactElement } from "react";
 
 type Props = {
     label: string,
@@ -201,17 +204,64 @@ export default (props: Props) => {
             },
 
             componentBlocks: {
-                asset: component({
-                    preview: (props) => {
-                        return React.createElement('div', null, JSON.stringify(props));
+                upload: component({
+                    preview: ({ fields }) => {
+                        function renderIcon(icon: ReactElement) {
+                            return React.cloneElement(icon, {
+                                className: css({
+                                    width: tokenSchema.size.icon.large,
+                                    height: tokenSchema.size.icon.large,
+                                    fill: "transparent",
+                                    stroke: tokenSchema.color.foreground.neutral,
+                                })
+                            })
+                        }
+
+                        if (fields.ref.value) {
+                            const innerText = React.createElement('div', {
+                                className: css({
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    rowGap: tokenSchema.size.space.xsmall,
+                                })
+                            }, [
+                                React.createElement('span', {
+                                    className: css({
+                                        fontSize: tokenSchema.typography.text.small.size,
+                                        color: tokenSchema.color.foreground.neutralSecondary
+                                    })
+                                }, "Percorso della risorsa selezionata")
+                            ],
+                            React.createElement('span', null, fields.ref.value)
+                            )
+
+                            return React.createElement(NotEditable, {
+                                className: css({
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    columnGap: tokenSchema.size.space.medium
+                                })
+                            }, [renderIcon(fileIcon), innerText]);
+                        }
+
+                        return React.createElement(NotEditable, {
+                            className: css({
+                                display: 'flex',
+                                alignItems: 'center',
+                                columnGap: tokenSchema.size.space.medium
+                            })
+                        }, [
+                            renderIcon(filePlus2Icon),
+                            React.createElement('span', null, "Seleziona un file da incorporare...")
+                        ]);
                     },
-                    label: "Asset",
+                    label: "File",
                     schema: {
                         ref: fields.relationship({
-                            label: "Percorso risorsa",
-                            collection: "assets"
+                            label: "Percorso della risorsa selezionata",
+                            collection: "uploads"
                         })
-                    }
+                    },
                 }),
 
                 image: component({
