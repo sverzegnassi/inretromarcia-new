@@ -1,5 +1,6 @@
 
 import { fields, collection } from '@keystatic/core';
+import defaultContentField from '../editor/default';
 
 export default collection({
     label: "Corea del Sud",
@@ -13,9 +14,10 @@ export default collection({
             label: "Estratto / Anteprima dell'articolo",
             multiline: true,
         }),
-        image: fields.pathReference({
+        image: fields.image({
             label: "Immagine cover",
-            pattern: 'src/assets/uploads/*'
+            directory: "src/assets/cover",
+            publicPath: "src/assets/cover/",   // This value is added to the frontmatter and utilized by AstroJS
         }),
         date: fields.datetime({
             label: "Data di pubblicazione"
@@ -40,12 +42,8 @@ export default collection({
             label: "Mostra tabella dei contenuti",
             defaultValue: false,
         }),
-        content: fields.document({
+        content: defaultContentField({
             label: 'Contenuto',
-            formatting: true,
-            dividers: true,
-            links: true,
-            images: true,
         }),
         meta: fields.object({
             title: fields.text({
@@ -70,7 +68,9 @@ export default collection({
         socialCard: fields.object({
             image: fields.image({
                 label: "Immagine",
-                description: "Personalizza l'immagine associata al tuo contenuto quando viene condiviso. Se non fornita, l'Immagine Cover verrà utilizzata."
+                description: "Personalizza l'immagine associata al tuo contenuto quando viene condiviso. Se non fornita, l'Immagine Cover verrà utilizzata.",
+                directory: "src/assets/social-cards",
+                publicPath: "src/assets/social-cards/",   // This value is added to the frontmatter and utilized by AstroJS
             }),
             title: fields.text({
                 label: "Titolo della card",

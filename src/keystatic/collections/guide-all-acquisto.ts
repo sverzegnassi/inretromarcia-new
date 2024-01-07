@@ -1,5 +1,6 @@
 
 import { fields, collection } from '@keystatic/core';
+import defaultContentField from '../editor/default';
 
 export default collection({
     label: "Guide all'acquisto",
@@ -8,12 +9,8 @@ export default collection({
     format: { contentField: 'content' },
     schema: {
         title: fields.slug({ name: { label: 'Title' } }),
-        content: fields.document({
-            label: 'Content',
-            formatting: true,
-            dividers: true,
-            links: true,
-            images: true,
+        content: defaultContentField({
+            label: 'Contenuto',
         }),
     },
 })
