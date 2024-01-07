@@ -1,5 +1,6 @@
-import { component, fields } from "@keystatic/core";
+import { NotEditable, component, fields } from "@keystatic/core";
 import { imageIcon } from '@keystar/ui/icon/icons/imageIcon';
+import { css, tokenSchema } from '@keystar/ui/style';
 import React from "react";
 
 
@@ -11,7 +12,11 @@ export default () => {
                 return React.createElement('img', { src: objectURL }, null);
             }
 
-            return React.createElement('div', null, "Carica una nuova immagine...");
+            return React.createElement(NotEditable, {
+                className: css({
+                    color: tokenSchema.color.foreground.neutralSecondary,
+                })
+            }, "Carica una nuova immagine...");
         },
         label: "Immagine",
         schema: {
