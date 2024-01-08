@@ -15,7 +15,7 @@
     "@astrojs/react": "^3.0.9",
     "@astrojs/tailwind": "^5.0.3",
     "@keystatic/astro": "^2.0.3",
-    "@keystatic/core": "^0.2.9",
+    "@keystatic/core": "^0.2.10",
     "@types/react": "^18.2.46",
     "@types/react-dom": "^18.2.18",
     "astro": "^4.1.1",
