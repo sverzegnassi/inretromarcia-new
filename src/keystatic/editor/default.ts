@@ -202,6 +202,8 @@ export default (props: Props) => {
                 softBreaks: true,
             },
 
+            tables: true,
+
             componentBlocks: {
                 upload: UploadComponent(),
                 image: ImageComponent(),
