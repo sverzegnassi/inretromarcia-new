@@ -37,6 +37,10 @@ export default collection({
                 itemLabel: props => props.value ?? "",
             }
         ),
+        linkTitle: fields.text({
+            label: "Titolo della pagina (link interno)",
+            description: "Consente di fornire una variante più breve del titolo, da utilizzare per i link all'interno della pagina."
+        }),
         toc: fields.checkbox({
             label: "Mostra tabella dei contenuti",
             defaultValue: false,
@@ -60,15 +64,18 @@ export default collection({
             }),
             schema: fields.text({
                 label: "Integrazione Schema.org",
-                description: "consente di arricchire la struttura semantica delle tue pagine web incorporando marcature Schema.org. Questa integrazione fornisce informazioni dettagliate ai motori di ricerca su elementi specifici della pagina, migliorando la comprensione del contenuto e facilitando la presentazione ricca dei risultati di ricerca.",
+                description: "Consente di arricchire la struttura semantica delle tue pagine web incorporando marcature Schema.org. Questa integrazione fornisce informazioni dettagliate ai motori di ricerca su elementi specifici della pagina, migliorando la comprensione del contenuto e facilitando la presentazione ricca dei risultati di ricerca.",
                 multiline: true,
             })
+        },{
+            label: "Meta",
+            description: "Parametri per configurare e ottimizzare l'indicizzazione dei siti sui motori di ricerca."
         }),
         socialCard: fields.object({
             // TODO: In the current Hugo setup (version 1.0 of the website), social card images are automatically generated.
             // At some point, such functionality will be re-implemented.
             image: fields.image({
-                label: "Immagine",
+                label: "Immagine della card",
                 description: "Personalizza l'immagine associata al tuo contenuto quando viene condiviso. Se non fornita, l'Immagine Cover verrà utilizzata.",
                 directory: "src/assets/social-cards",
                 publicPath: "src/assets/social-cards/",   // This value is added to the frontmatter and utilized by AstroJS
