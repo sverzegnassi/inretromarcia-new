@@ -1,7 +1,7 @@
 import { NotEditable, component, fields } from "@keystatic/core";
 import { imageIcon } from '@keystar/ui/icon/icons/imageIcon';
 import React from "react";
-import { Label } from "./ui-common";
+import { Label, LabelWithCaption } from "./ui-common";
 
 
 export default () => {
@@ -9,7 +9,13 @@ export default () => {
         preview: ({ fields }) => {
             if (fields.file.value) {
                 const objectURL = URL.createObjectURL(new Blob([fields.file.value.data]));
-                return React.createElement('img', { src: objectURL }, null);
+                return React.createElement('div', null,
+                    React.createElement('img', { src: objectURL, loading: "lazy" }, null),
+                    LabelWithCaption({
+                        caption: fields.alt.value ?? "Testo alternativo non specificato",
+                        text: fields.title.value ?? ""
+                    })
+                );
             }
 
             return React.createElement(NotEditable, null,
