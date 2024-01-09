@@ -1,0 +1,17 @@
+{
+  "general": {
+    "@type": "Organization",
+    "name": "In Retromarcia",
+    "logo": "/schemaOrg/general/logo.svg"
+  },
+  "address": [],
+  "onlinePresence": {
+    "sameAs": [
+      "https://twitter.com/InRetromarcia",
+      "https://www.pinterest.com/inretromarcia/",
+      "https://wanderlog.com/u/inretromarcia"
+    ]
+  },
+  "contacts": {},
+  "taxInformation": {}
+}
