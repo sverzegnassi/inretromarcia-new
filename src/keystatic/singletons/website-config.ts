@@ -18,16 +18,20 @@ export default singleton({
                 label: "Meta description predefinita",
                 description: "Verrà utilizzata qualora la pagina non specifichi una propria descrizione."
             }),
-            lang: fields.text({
-                label: "Lingua predefinita",
-                description: "Specificare il codice ISO per la lingua predefinita del sito.",
-            }),
             titleDelimiter: fields.text({
                 label: "Delimitatore del titolo",
                 description:
                   "Consente di impostare il carattere delimitatore tra il titolo della pagina e il titolo del sito nella tag <title> della pagina, visibile nelle schede del browser.",
                 defaultValue: "|",
               }),
+            lang: fields.text({
+                label: "Lingua predefinita",
+                description: "Il codice ISO 639-1 per la lingua predefinita del sito (ad esempio `it`).",
+            }),
+            siteUrl: fields.url({
+                label: "URL del sito",
+                description: "L'URL assoluto (protocollo, host, percorso - senza barra finale) del tuo sito pubblicato (ad esempio `https://www.example.org`)."
+            })
         }, {
             label: "Generale",
             description: "Configurazione generale per il sito web"
@@ -51,6 +55,34 @@ export default singleton({
         }, {
             label: "Feed RSS",
             description: "Configurazione del feed RSS del sito"
+        }),
+        sitemap: fields.object({
+            exclude: fields.array(
+                fields.url({
+                    label: "Slug or URL of the page to exclude",
+                    validation: {
+                        isRequired: true
+                    }
+                }), {
+                    label: "Pagine da escludere",
+                    itemLabel: props => props.value ?? "Valore non valido"
+                }
+            ),
+            include: fields.array(
+                fields.url({
+                    label: "Slug or URL of the page to include",
+                    validation: {
+                        isRequired: true
+                    }
+                }),
+                {
+                    label: "Pagine da includere",
+                    itemLabel: props => props.value ?? "Valore non valido"
+                }
+            ),
+        }, {
+            label: "Sitemap XML",
+            description: "Personalizza le impostazioni per la generazione del file XML contenente informazioni strutturate sulle pagine del sito, facilitando l'indicizzazione da parte dei motori di ricerca."
         }),
         socials: fields.object({
             facebook: fields.url({

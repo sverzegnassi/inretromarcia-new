@@ -2,12 +2,19 @@
   "general": {
     "titleShort": "In Retromarcia",
     "titleLong": "In Retromarcia. Guida di viaggio in Corea del Sud",
-    "lang": "it"
+    "titleDelimiter": "|",
+    "lang": "it",
+    "siteUrl": "https://inretromarcia.it"
   },
   "searchEngines": {
     "robots": "Sitemap: {{ \"sitemap.xml\" | absLangURL }}\nUser-agent: *\nDisallow: /admin/\nDisallow: /admin/index.html\nDisallow: /404.html\nDisallow: /404/\n\n{{ range .Data.Pages }}\n    {{ if and (in .Params.robots \"nofollow\") (in .Params.robots \"noindex\") }}\n        Disallow: {{ .RelPermalink }}\n    {{ end }}\n{{ end }}"
   },
   "rss": {
     "enabled": true
-  }
+  },
+  "sitemap": {
+    "exclude": [],
+    "include": []
+  },
+  "socials": {}
 }
