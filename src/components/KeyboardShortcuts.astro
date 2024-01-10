@@ -1,0 +1,26 @@
+---
+let urlParts = Astro.url.pathname.split("/").filter(s => s)
+
+const { articleUrlPathMatches, ...attrs } = Astro.props
+---
+
+<a {...attrs} class="offscreen-shortcut" href="#content">Skip to main content</a>
+{
+    (urlParts.shift()?.match(articleUrlPathMatches) && urlParts.length > 0) &&
+    <a class="offscreen-shortcut" href="#article-start">Start reading the article</a>
+}
+
+
+<style>
+  .offscreen-shortcut {
+    @apply absolute -top-full;
+  }
+
+  .offscreen-shortcut:focus {
+    @apply fixed top-2 left-2;
+    @apply z-[1000];
+    @apply p-4;
+    @apply bg-neutral-200;
+    @apply text-neutral-900;
+  }
+</style>

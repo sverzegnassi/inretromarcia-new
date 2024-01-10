@@ -1,0 +1,217 @@
+---
+import getFullEntryDefinition from "@lib/keystatic/getFullEntryDefinition";
+import _ from "lodash";
+
+interface Props {
+  collectionName: string;
+  slug: string;
+}
+
+const { collectionName, slug } = Astro.props;
+const webpageFullUrl = new URL(Astro.url.pathname, Astro.site).href;
+
+// Read Keystatic configuration
+const { websiteConfig, organizationConfig, cmsEntry, coverImage, collectionLabel, tags } = await getFullEntryDefinition(
+  { collectionName: collectionName, slug: slug },
+);
+
+// Helpers
+const isNotEmpty = (value: string) => value !== undefined && value !== null && value !== "";
+
+function bindSchemaIfExists(parent: object, parentProperties: string[], schemaObject: object | null | undefined) {
+  if (schemaObject === undefined || schemaObject === null) return;
+
+  if (_.has(schemaObject, "@context")) {
+    parentProperties.forEach((prop) => {
+      _.set(parent, prop, {
+        "@id": _.get(schemaObject, "@id"),
+      });
+    });
+  }
+}
+
+function safeJsonParse(jsonString: string) {
+  try {
+    return JSON.parse(jsonString);
+  } catch (error) {
+    console.warn("Collection:", collectionName, "-", "Slug:", slug, ":", "Provided JSON string is not valid.");
+    return null;
+  }
+}
+
+// Organization schema
+const isOrganizationDefined = organizationConfig?.general.name && organizationConfig?.general["@type"];
+let OrganizationSchema: Object | undefined = undefined;
+
+if (isOrganizationDefined) {
+  const orgGeneral = _.pickBy(organizationConfig.general, isNotEmpty);
+  const orgOnline = _.pickBy(organizationConfig.onlinePresence, isNotEmpty);
+  const orgContacts = _.pickBy(organizationConfig.contacts, isNotEmpty);
+  const orgTaxInformation = _.pickBy(organizationConfig.taxInformation, isNotEmpty);
+
+  const orgAddress = organizationConfig.address
+    .filter(
+      ({ streetAddress, addressLocality, addressCountry }) =>
+        isNotEmpty(streetAddress) && isNotEmpty(addressLocality) && isNotEmpty(addressCountry),
+    )
+    .map((v) => {
+      return { ...v, "@type": "PostalAddress" };
+    });
+
+  OrganizationSchema = {
+    "@context": "https://schema.org",
+    "@id": `${Astro.site}#identity`,
+    address: [...orgAddress],
+    url: Astro.site?.toString(),
+    ...orgGeneral,
+    ...orgOnline,
+    ...orgContacts,
+    ...orgTaxInformation,
+    logo: `${Astro.site?.toString()}${_.get(orgGeneral, "logo")}`,
+  };
+}
+
+// Website schema
+
+const WebsiteSchema = {
+  "@context": "https://schema.org",
+  "@type": "Website",
+  "@id": `${Astro.site}#website`,
+  url: Astro.site?.toString() ?? "",
+  inLanguage: websiteConfig?.general.lang ?? "en",
+  name: websiteConfig?.general.titleShort ?? Astro.site?.toString() ?? "",
+
+  /* TODO: When search is implemented    
+    potentialAction: {
+        "@type": "SearchAction",
+        target: `${Astro.site}search/?query={search_term_string}`,
+        "query-input": "required name=search_term_string"
+    }
+  */
+};
+
+bindSchemaIfExists(WebsiteSchema, ["copyrightHolder", "publisher"], OrganizationSchema);
+
+// Breadcrumbs schema
+
+// Explanation:
+// The 'tag' field in CMS entries is conceptually more aligned with Breadcrumbs
+// than a traditional tag system. In Keystatic, we leverage fields.array() for
+// implementing tag functionality, benefiting from the additional feature of
+// sortable tags.
+
+// TODO: Consider updating the 'tags' collection to accurately represent its current
+// usage, reflecting the breadcrumb-like behavior rather than typical tagging.
+
+let BreadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "@id": `${webpageFullUrl}#breadcrumbs`,
+  itemListElement: tags.map((tag) => {
+    return {
+      "@type": "ListItem",
+      position: tag.position,
+      name: tag.name,
+      item: tag.breadcrumbUrl,
+    };
+  }),
+};
+
+// Cover image schema
+// TODO: Revisit the attribution fields to meet additional requirements for successful Google Schema Validation.
+// WORKAROUND: Although more fields may be necessary, let's use the existing fields for the time being.
+const CoverImageSchema = {
+  "@context": "https://schema.org",
+  "@type": "ImageObject",
+  "@id": `${webpageFullUrl}#coverImage`,
+  url: coverImage?.src ?? "",
+  contentUrl: coverImage?.src ?? "",
+  width: coverImage?.width,
+  height: coverImage?.height,
+  creator: coverImage?.attribution.author && {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name: coverImage?.attribution.author,
+  },
+  license: coverImage?.attribution.license,
+  acquireLicensePage: coverImage?.attribution.source,
+  copyrightNotice:
+    coverImage?.attribution.author &&
+    coverImage?.attribution.license &&
+    coverImage?.attribution.source &&
+    `Author: ${coverImage?.attribution.author} - License: ${coverImage?.attribution.license} - Source: ${coverImage?.attribution.source}`,
+  creditText:
+    coverImage?.attribution.author &&
+    coverImage?.attribution.license &&
+    coverImage?.attribution.source &&
+    `Author: ${coverImage?.attribution.author} - License: ${coverImage?.attribution.license} - Source: ${coverImage?.attribution.source}`,
+};
+
+// Webpage schema
+const WebpageSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebPage", // "CollectionPage"
+  "@id": webpageFullUrl,
+  name: cmsEntry.title,
+  description: cmsEntry.meta.description || cmsEntry.excerpt,
+  url: webpageFullUrl,
+  about: safeJsonParse(cmsEntry.meta.schema || "null"),
+  inLanguage: websiteConfig?.general.lang ?? "en",
+  // TODO: datePublished
+  // TODO: dateModified
+  potentialAction: [
+    {
+      "@type": "ReadAction",
+      target: [webpageFullUrl],
+    },
+  ],
+};
+
+bindSchemaIfExists(WebpageSchema, ["isPartOf"], WebsiteSchema);
+bindSchemaIfExists(WebpageSchema, ["breadcrumb"], BreadcrumbSchema);
+bindSchemaIfExists(WebpageSchema, ["copyrightHolder", "publisher"], OrganizationSchema);
+bindSchemaIfExists(WebpageSchema, ["primaryImageOfPage", "thumbnailUrl"], CoverImageSchema);
+
+// Article schema
+
+const ArticleSchema = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "@id": `${webpageFullUrl}#article`,
+  lang: websiteConfig?.general.lang ?? "en",
+  headline: cmsEntry.title,
+  // TODO: datePublished
+  // TODO: dateModified
+  // TODO: wordCount
+  // TODO: commentCount
+  articleSection: collectionLabel,
+  potentialAction: [
+    {
+      "@type": "ReadAction",
+      target: [webpageFullUrl],
+    },
+  ],
+};
+
+bindSchemaIfExists(ArticleSchema, ["isPartOf", "mainEntityOfPage"], WebpageSchema);
+bindSchemaIfExists(ArticleSchema, ["copyrightHolder", "publisher"], OrganizationSchema);
+bindSchemaIfExists(ArticleSchema, ["primaryImageOfPage", "thumbnailUrl", "image"], CoverImageSchema);
+
+// Main / Graph schema
+
+const MainSchema = {
+  "@context": "https://schema.org",
+  "@graph": _.compact([
+    OrganizationSchema,
+    WebsiteSchema,
+    BreadcrumbSchema,
+    CoverImageSchema,
+    WebpageSchema,
+    ArticleSchema,
+  ]),
+};
+
+console.log(MainSchema);
+---
+
+<script type="application/ld+json" is:inline set:html={JSON.stringify(MainSchema)} />

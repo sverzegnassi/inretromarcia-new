@@ -1,0 +1,25 @@
+---
+export interface Props {
+    title?: string,
+    description?: string,
+    url?: string,
+    locale?: string,
+    siteName?: string,
+    image?: string,
+}
+
+const { title, description, url, locale, siteName, image } = Astro.props;
+---
+
+                   <meta property="og:type"         content="article">
+{title          && <meta property="og:title"        content={title}>}
+{description    && <meta property="og:description"  content={description}>}
+{url            && <meta property="og:url"          content={url}>}
+{siteName       && <meta property="og:site_name"    content={siteName}>}
+{locale         && <meta property="og:locale"       content={locale}>}
+{image          && <meta property="og:image"        content={image}>}
+
+                   <meta name="twitter:card"        content="summary_large_image">
+{title          && <meta name="twitter:title"       content={title}>}
+{description    && <meta name="twitter:description" content={description}>}
+{image          && <meta name="twitter:image"       content={image}>}

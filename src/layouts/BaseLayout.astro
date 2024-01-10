@@ -1,0 +1,129 @@
+---
+import KeyboardShortcuts from "../components/KeyboardShortcuts.astro";
+import SocialCard from "./partials/SocialCard.astro";
+import SchemaOrg from "./partials/SchemaOrg.astro";
+import getFullEntryDefinition from "@lib/keystatic/getFullEntryDefinition";
+
+export interface Props {
+  collectionName: string;
+  slug: string;
+}
+
+const {
+  collectionName,
+  slug
+} = Astro.props;
+
+const { websiteConfig, cmsEntry, coverImage, socialCard } =
+  await getFullEntryDefinition({ collectionName: collectionName, slug: slug });
+
+/*
+    Title render priority:
+        1) Page MetaTitle + Website.TitleShort
+        2) Page MetaTitle
+        3) Page Title + Website.TitleShort
+        4) Page Title
+        5) Website.TitleLong
+        6) Website.TitleShort
+        7) Give up (`undefined`)
+*/
+
+// Find the first non-falsy title from the array
+const validTitle = [cmsEntry.meta.title, cmsEntry.title].find((title) => title);
+const delimiter = websiteConfig?.general.titleDelimiter ?? " | ";
+
+const renderedTitle = (function () {
+  if (validTitle) {
+    return websiteConfig?.general.titleShort
+      ? `${validTitle} ${delimiter} ${websiteConfig?.general.titleShort}`
+      : validTitle;
+  }
+
+  return websiteConfig?.general.titleLong || websiteConfig?.general.titleShort || undefined;
+})();
+
+/*
+    MetaDescription render priority:
+      1) Page MetaDescription
+      2) Page Excerpt
+      3) Auto-generate an excerpt from the content (Not implemented)
+      4) Website MetaDescription
+      5) Give up (`undefined`)
+*/
+
+const renderedDescription = cmsEntry.meta.description || cmsEntry.excerpt || websiteConfig?.general.description || undefined;
+
+/*
+    Canonical URL render priority
+        1) As defined in page front matter
+        2) With Astro.site (must be set in website config), the page URL
+        3) Safe guard: `undefined`
+*/
+let renderedCanonicalURL: string | undefined = "";
+if (cmsEntry.meta.canonicalURL) {
+  renderedCanonicalURL = cmsEntry.meta.canonicalURL;
+} else {
+  renderedCanonicalURL = Astro.site ? new URL(Astro.url.pathname, Astro.site).href : undefined;
+}
+---
+
+<html lang={websiteConfig?.general.lang ?? "en"}>
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+
+    <!-- META TAGS -->
+    {renderedTitle && <title>{renderedTitle}</title>}
+    {renderedDescription && <meta name="description" content={renderedDescription} />}
+    {renderedCanonicalURL && <link rel="canonical" href={renderedCanonicalURL} />}
+
+    <!-- FAVICONS -->
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="icon" href="/favicon.png" type="image/png">
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="/apple-touch-icon-180x180.png" sizes="180x180">
+
+    <!-- SITEMAP -->
+    {Astro.site && <link rel="sitemap" href="/sitemap-index.xml" />}
+
+    <!-- RSS -->
+    {
+      Astro.site && websiteConfig?.rss.enabled && (
+        <link rel="alternate" hreflang={websiteConfig.general.lang} href={`${Astro.site}/rss.xml`} />
+      )
+    }
+
+    <!-- TODO: Robots meta tag.  -->
+    <!-- Update page schema with the following: -->
+    <!-- https://developers.google.com/search/docs/crawling-indexing/robots-meta-tag?hl=it#nosnippet -->
+
+    <!-- OPENGRAPH + X / TWITTER -->
+    <SocialCard
+      image={socialCard?.src ?? coverImage?.src ?? ""}
+      title={socialCard?.title ?? renderedTitle}
+      description={socialCard?.description ?? renderedDescription}
+      siteName={websiteConfig?.general.titleShort}
+      locale={websiteConfig?.general.lang}
+      url={renderedCanonicalURL}
+    />
+
+    <!-- SCHEMA.ORG -->
+    {
+      Astro.site && (
+        <SchemaOrg
+          collectionName={collectionName}
+          slug={slug}
+        />
+      )
+    }
+
+    <slot name="codeInjectionHeader" />
+  </head>
+  <body>
+    <KeyboardShortcuts />
+    <slot />
+    <slot name="codeInjectionFooter" />
+  </body>
+</html>
