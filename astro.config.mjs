@@ -6,6 +6,7 @@ import keystatic from '@keystatic/astro';
 
 import sitemap from "@astrojs/sitemap";
 import { readFile } from "fs/promises";
+import netlify from "@astrojs/netlify";
 
 let siteUrl = undefined;
 let activeIntegrations = []
@@ -36,5 +37,6 @@ activeIntegrations.push(defaultIntegrations)
 export default defineConfig({
   site: siteUrl,
   integrations: activeIntegrations,
-  output: 'hybrid'
+  output: 'hybrid',
+  adapter: netlify()
 });
