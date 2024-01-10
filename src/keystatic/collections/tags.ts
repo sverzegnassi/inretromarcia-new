@@ -8,5 +8,9 @@ export default collection({
     format: { data: "json" },
     schema: {
         title: fields.slug({name: { label: 'Nome' } }),
+        breadcrumbUrl: fields.pathReference({
+            label: "Link alla sezione correlata",
+            pattern: 'src/content/**/*.mdoc'
+        })
     },
 })
