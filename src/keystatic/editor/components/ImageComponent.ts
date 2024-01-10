@@ -30,7 +30,7 @@ export default () => {
             file: fields.image({
                 label: "Percorso risorsa",
                 directory: "src/assets/uploads",
-                publicPath: "src/assets/uploads/",
+                publicPath: "/src/assets/uploads/",
                 
                 /* WORKAROUND: Ensure that the user uploads a valid picture.
 

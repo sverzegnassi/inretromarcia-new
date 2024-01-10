@@ -78,7 +78,7 @@ export default collection({
                 label: "Immagine della card",
                 description: "Personalizza l'immagine associata al tuo contenuto quando viene condiviso. Se non fornita, l'Immagine Cover verrà utilizzata.",
                 directory: "src/assets/social-cards",
-                publicPath: "src/assets/social-cards/",   // This value is added to the frontmatter and utilized by AstroJS
+                publicPath: "/src/assets/social-cards/",   // This value is added to the frontmatter and utilized by AstroJS
             }),
             title: fields.text({
                 label: "Titolo della card",

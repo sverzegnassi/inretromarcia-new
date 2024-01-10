@@ -23,7 +23,7 @@ export default collection({
         file: fields.image({
             label: "Caricamento file",
             directory: "src/assets/cover-images",
-            publicPath: "src/assets/cover-images/",   // This value is added to the frontmatter and utilized by AstroJS
+            publicPath: "/src/assets/cover-images/",   // This value is added to the frontmatter and utilized by AstroJS
         }),
         attribution: fields.object({
             source: fields.text({
