@@ -1,4 +1,21 @@
 /** @type {import('tailwindcss').Config} */
+const defaultTheme = require('tailwindcss/defaultTheme')
+
+// `hexToRgb`
+// From: https://github.com/tailwindlabs/tailwindcss-typography/blob/master/src/styles.js
+// Copyright (c) Tailwind Labs, Inc.
+// License: MIT
+const hexToRgb = (hex) => {
+	hex = hex.replace('#', '')
+	hex = hex.length === 3 ? hex.replace(/./g, '$&$&') : hex
+	const r = parseInt(hex.substring(0, 2), 16)
+	const g = parseInt(hex.substring(2, 4), 16)
+	const b = parseInt(hex.substring(4, 6), 16)
+	return `${r} ${g} ${b}`
+}
+
+// === end of `hexToRgb`
+
 export default {
 	content: ['./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}'],
 	theme: {
@@ -7,7 +24,7 @@ export default {
 			transparent: 'transparent',
 			current: 'currentColor',
 			black: "#000",
-      		white: "#fff",
+			white: "#fff",
 			'neutral': {
 				'100': '#f2fbff',
 				'200': '#e4f7ff',
@@ -53,49 +70,56 @@ export default {
 				'700': '#163976',
 			},
 		},
+		extend: {
+			padding: ["first", "last"],
+			fontFamily: {
+				'serif': ['Roboto Serif Variable', ...defaultTheme.fontFamily.serif],
+			},
+			typography: ({ theme }) => ({
+				custom: {
+					css: {
+						'--tw-prose-body': theme('colors.neutral[800]'),
+						'--tw-prose-headings': theme('colors.neutral[900]'),
+						'--tw-prose-lead': theme('colors.neutral[700]'),
+						'--tw-prose-links': theme('colors.neutral[900]'),
+						'--tw-prose-bold': theme('colors.neutral[900]'),
+						'--tw-prose-counters': theme('colors.neutral[600]'),
+						'--tw-prose-bullets': theme('colors.neutral[400]'),
+						'--tw-prose-hr': theme('colors.neutral[300]'),
+						'--tw-prose-quotes': theme('colors.neutral[900]'),
+						'--tw-prose-quote-borders': theme('colors.neutral[300]'),
+						'--tw-prose-captions': theme('colors.neutral[700]'),
+						'--tw-prose-kbd': theme('colors.neutral[900]'),
+						'--tw-prose-kbd-shadows': hexToRgb(theme('colors.neutral[100]')),
+						'--tw-prose-code': theme('colors.neutral[900]'),
+						'--tw-prose-pre-code': theme('colors.neutral[100]'),
+						'--tw-prose-pre-bg': theme('colors.neutral[900]'),
+						'--tw-prose-th-borders': theme('colors.neutral[300]'),
+						'--tw-prose-td-borders': theme('colors.neutral[200]'),
+						'--tw-prose-invert-body': theme('colors.neutral[200]'),
+						'--tw-prose-invert-headings': theme('colors.white'),
+						'--tw-prose-invert-lead': theme('colors.neutral[300]'),
+						'--tw-prose-invert-links': theme('colors.white'),
+						'--tw-prose-invert-bold': theme('colors.white'),
+						'--tw-prose-invert-counters': theme('colors.neutral[400]'),
+						'--tw-prose-invert-bullets': theme('colors.neutral[600]'),
+						'--tw-prose-invert-hr': theme('colors.neutral[700]'),
+						'--tw-prose-invert-quotes': theme('colors.neutral[100]'),
+						'--tw-prose-invert-quote-borders': theme('colors.neutral[700]'),
+						'--tw-prose-invert-captions': theme('colors.neutral[400]'),
+						'--tw-prose-invert-kbd': theme('colors.neutral[100]'),
+						'--tw-prose-invert-kbd-shadows': hexToRgb(theme('colors.neutral[100]')),
+						'--tw-prose-invert-code': theme('colors.white'),
+						'--tw-prose-invert-pre-code': theme('colors.neutral[300]'),
+						'--tw-prose-invert-pre-bg': 'rgb(0 0 0 / 50%)',
+						'--tw-prose-invert-th-borders': theme('colors.neutral[600]'),
+						'--tw-prose-invert-td-borders': theme('colors.neutral[700]'),
+					},
+				},
+			}),
+		},
 	},
 	plugins: [
 		require('@tailwindcss/typography'),
 	],
-	extend: {
-		padding: ["first", "last"],
-		typography: ({ theme }) => ({
-			custom: {
-				css: {
-					'--tw-prose-body': theme('colors.neutral[800]'),
-					'--tw-prose-headings': theme('colors.neutral[900]'),
-					'--tw-prose-lead': theme('colors.neutral[700]'),
-					'--tw-prose-links': theme('colors.neutral[900]'),
-					'--tw-prose-bold': theme('colors.neutral[900]'),
-					'--tw-prose-counters': theme('colors.neutral[600]'),
-					'--tw-prose-bullets': theme('colors.neutral[400]'),
-					'--tw-prose-hr': theme('colors.neutral[300]'),
-					'--tw-prose-quotes': theme('colors.neutral[900]'),
-					'--tw-prose-quote-borders': theme('colors.neutral[300]'),
-					'--tw-prose-captions': theme('colors.neutral[700]'),
-					'--tw-prose-code': theme('colors.neutral[900]'),
-					'--tw-prose-pre-code': theme('colors.neutral[100]'),
-					'--tw-prose-pre-bg': theme('colors.neutral[900]'),
-					'--tw-prose-th-borders': theme('colors.neutral[300]'),
-					'--tw-prose-td-borders': theme('colors.neutral[200]'),
-					'--tw-prose-invert-body': theme('colors.neutral[200]'),
-					'--tw-prose-invert-headings': theme('colors.white'),
-					'--tw-prose-invert-lead': theme('colors.neutral[300]'),
-					'--tw-prose-invert-links': theme('colors.white'),
-					'--tw-prose-invert-bold': theme('colors.white'),
-					'--tw-prose-invert-counters': theme('colors.neutral[400]'),
-					'--tw-prose-invert-bullets': theme('colors.neutral[600]'),
-					'--tw-prose-invert-hr': theme('colors.neutral[700]'),
-					'--tw-prose-invert-quotes': theme('colors.neutral[100]'),
-					'--tw-prose-invert-quote-borders': theme('colors.neutral[700]'),
-					'--tw-prose-invert-captions': theme('colors.neutral[400]'),
-					'--tw-prose-invert-code': theme('colors.white'),
-					'--tw-prose-invert-pre-code': theme('colors.neutral[300]'),
-					'--tw-prose-invert-pre-bg': 'rgb(0 0 0 / 50%)',
-					'--tw-prose-invert-th-borders': theme('colors.neutral[600]'),
-					'--tw-prose-invert-td-borders': theme('colors.neutral[700]'),
-				},
-			},
-		}),
-	},
 }
