@@ -11,7 +11,7 @@ const postCollection = defineCollection({
             return /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(value);
         }, {
             message: 'Invalid DateTimeLocal string format',
-        }),
+        }).optional(),
         draft: z.boolean().optional(),
         tags: z.array(z.string()).optional(),
         linkTitle: z.string().optional(),
