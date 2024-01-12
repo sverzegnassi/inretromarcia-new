@@ -71,7 +71,6 @@ export default {
 			},
 		},
 		extend: {
-			padding: ["first", "last"],
 			fontFamily: {
 				'serif': ['Roboto Serif Variable', ...defaultTheme.fontFamily.serif],
 			},
