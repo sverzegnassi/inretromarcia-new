@@ -1,0 +1,129 @@
+---
+import { type DocumentElement, type DocumentNode } from "@keystatic/core";
+import { Code } from "astro/components";
+import documentRendererSchema from "./documentRendererSchema";
+
+// To enable support for `code`, we utilize Astro's native integration with Shiki.
+// Prism appears to be soft-deprecated.
+// Ref. https://github.com/withastro/roadmap/blob/main/proposals/0004-replace-prism-with-shiki.md
+
+import type {
+  BuiltinLanguage,
+  BuiltinTheme,
+  LanguageRegistration,
+  SpecialLanguage,
+  ThemeRegistration,
+  ThemeRegistrationRaw,
+} from "shikiji";
+import { bundledLanguages } from "shikiji/langs";
+type ShikiSupportedLanguage = BuiltinLanguage | SpecialLanguage | LanguageRegistration;
+
+// Shiki configuration aligned with the Astro `<Code>` native component.
+// https://github.com/withastro/astro/blob/05628aaa3c9a3702b59cbf3d0e99abf66df651df/packages/astro/components/Code.astro#L9
+type CodeConfiguration = {
+  theme?: BuiltinTheme | ThemeRegistration | ThemeRegistrationRaw;
+  experimentalThemes?: Record<string, BuiltinTheme | ThemeRegistration | ThemeRegistrationRaw>;
+  wrap?: boolean | null;
+};
+
+export interface Props {
+  document: DocumentNode[];
+  codeConfiguration?: CodeConfiguration;
+  componentBlocks?: Record<string, (_props: Record<string, any>) => any>;   // Type of an Astro component
+}
+
+const { document, codeConfiguration, componentBlocks } = Astro.props;
+---
+
+{
+  () => {
+    const renderNode = (node: DocumentNode) => {
+      // The property `text` is exclusive to instances of the `DocumentText` type.
+      if (node.text) {
+        let renderedText = node.text;
+
+        const textProperties = Object.keys(node);
+        for (const [key, value] of Object.entries(documentRendererSchema.inline)) {
+          if (textProperties.includes(key)) {
+            const Tag = value;
+            renderedText = <Tag>{renderedText}</Tag>;
+          }
+        }
+
+        return renderedText;
+      }
+
+      const assertedNode = node as DocumentElement;
+      if (assertedNode.type) {
+        // Render user-defined `componentBlock` using Astro components.
+        if (assertedNode.type === "component-block") {
+          if (componentBlocks && Object.keys(componentBlocks).includes(assertedNode.component as string)) {
+            const Tag = componentBlocks[assertedNode.component as string];
+            return <Tag {...(assertedNode.props as object)} />;
+          }
+        }
+
+        // Render `code` element using Astro native integration for Shiki.
+        // Keystatic doesn't provide separated nodes for `<pre>` and `<code>`,
+        // preventing the re-use of the regular logic below.
+        if (assertedNode.type === "code") {
+          let lang: ShikiSupportedLanguage = "plaintext";
+          if (Object.keys(bundledLanguages).includes(assertedNode.language as string)) {
+            lang = assertedNode.language as ShikiSupportedLanguage;
+          }
+
+          return (
+            <Code
+              lang={lang}
+              code={assertedNode.children.map((child) => child.text).join()}
+              theme={codeConfiguration && codeConfiguration.theme}
+              experimentalThemes={codeConfiguration && codeConfiguration.experimentalThemes}
+              wrap={codeConfiguration && codeConfiguration.wrap}
+            />
+          );
+        }
+
+        // [Safe guard] Render an error message if the `componentBlock` is not configured.
+        if (!Object.keys(documentRendererSchema.block).includes(assertedNode.type as string)) {
+          return (
+            <div style="background-color: lightgrey; border: 6px dashed red; padding: 1rem; text-align: center;">
+              Component <code>{assertedNode.component}</code> is not configured.
+            </div>
+          );
+        }
+
+        // All other elements are rendered here.
+        const Component = documentRendererSchema.block[assertedNode.type as string].component({
+          /* `heading` */
+          level: assertedNode.level,
+
+          /* `table-cell`. Specifies whether `table-cell` should be rendered as `td` or `th` */
+          header: assertedNode.header,
+        });
+
+        const props = documentRendererSchema.block[assertedNode.type as string].props({
+          /* `link` */
+          href: assertedNode.href,
+
+          /* `paragraph` and `heading` */
+          textAlign: assertedNode.textAlign,
+
+          /* `heading` */
+          innerText: assertedNode.children.map(child => child.text),
+
+          /* `layout` */
+          layout: assertedNode.layout,
+
+          /* `image` */
+          src: assertedNode.src,
+          alt: assertedNode.alt,
+          title: assertedNode.title,
+        });
+
+        return <Component {...props}>{assertedNode.children?.map(renderNode)}</Component>;
+      }
+    };
+
+    return document.map(renderNode);
+  }
+}
