@@ -1,0 +1,31 @@
+---
+import Box from "@components/Box.astro";
+import BoxLayout from "@components/BoxLayout.astro";
+import Button from "@components/Button.astro";
+import Footer from "@components/Footer.astro";
+import NavigationBar from "@components/NavigationBar.astro";
+import BaseLayout from "@layouts/BaseLayout.astro";
+
+---
+
+<BaseLayout title="Pagina non trovata (404)">
+	<BoxLayout>
+		<NavigationBar />
+		
+		<Box prose="prose-80" class="[&>*]:mx-auto bg-brand-300 !rounded-3xl my-12 relative">
+			<div class="absolute leading-none text-[12rem] font-serif font-[500] [font-stretch:83%] -bottom-[2.5rem] -right-[1rem] text-neutral-200/50">
+				#404
+			</div>
+			<div class="relative mb-16">
+				<h1>Pagina non trovata</h1>
+				<p>Siamo spiacenti, ma la pagina che stai cercando non è disponibile. Potrebbe essere stata rimossa, o l'URL potrebbe essere stato digitato incorrettamente.</p>
+				<p>Controlla l'indirizzo web e assicurati che sia scritto correttamente.<br>Se il problema persiste, torna alla pagina principale per esplorare altre sezioni del sito. </p>
+			</div>
+			<Button class="relative" as="anchor" href="/">
+				Vai alla pagina iniziale
+			</Button>
+		  </Box>
+
+		<Footer />
+	</BoxLayout>
+</BaseLayout>
