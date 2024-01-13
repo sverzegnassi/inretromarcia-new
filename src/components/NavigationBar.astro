@@ -1,0 +1,87 @@
+---
+import Box from "./Box.astro";
+import Button from "./Button.astro";
+import Logo from "./Logo.astro";
+import SearchIcon from "./SearchIcon.astro";
+---
+
+<Box id="navbar" size="full-width" padding="none" class="[&>*]:flex [&>*]:justify-between [&>*]:items-center">
+  <Button as="anchor" color="muted" href="/" id="logoBtn" class="!gap-3">
+      <Logo class="h-12" />
+      <div id="logoText">
+        <div class="logo-title">In Retromarcia</div>
+        <div class="logo-tagline">Guida di viaggio alla Corea del Sud</div>
+      </div>
+  </Button>
+
+  <!-- TODO: Search -->
+  <Button color="muted" id="searchBtn" class="!gap-3">
+    <span class="text-xl" id="searchBtnText">Search</span>
+    <SearchIcon class="size-6" />
+  </Button>
+</Box>
+
+<style>
+  .logo-title {
+    @apply font-serif tracking-tight font-[500] [font-stretch:83%] leading-none;
+    @apply text-neutral-900 text-2xl;
+  }
+
+  .logo-tagline {
+    @apply leading-none text-neutral-800 text-sm mt-1;
+  }
+
+  #navbar {
+    @apply my-8 sticky top-4 z-50;
+    @apply px-0 sm:px-6 lg:px-8;
+
+    .btn {
+        @apply px-4 py-2 md:px-8 md:py-4;
+    }
+  }
+
+  #searchBtnText {
+    @apply hidden sm:block;
+  }
+
+  #navbar.scrolled #logoText,
+  #navbar.scrolled #searchBtnText {
+    animation: fadeOutAndShrink 300ms ease-out forwards;
+  }
+
+  #navbar.scrolled #logoBtn:hover #logoText,
+  #navbar.scrolled #searchBtn:hover #searchBtnText {
+    opacity: 1 !important;
+    width: auto !important;
+    height: auto !important;
+    mix-blend-mode: normal !important;
+  }
+
+  @keyframes fadeOutAndShrink {
+    0% {
+      opacity: 1;
+      width: auto;
+      height: auto;
+    }
+    50% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+  }
+</style>
+
+<script>
+  let navbar = document.getElementById("navbar");
+
+  window.onscroll = () => {
+    if (window.scrollY >= 32) {
+      navbar?.classList.add("scrolled");
+    } else {
+      navbar?.classList.remove("scrolled");
+    }
+  };
+</script>
