@@ -1,0 +1,112 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+export type Props = (
+  | ({ as: "button" } & HTMLAttributes<"button">)
+  | ({ as: "anchor" } & HTMLAttributes<"a">)
+  | ({ as: "input" } & HTMLAttributes<"input">)
+) & {
+  // Considering that `bg-neutral-200` serves as primary background and `bg-neutral-300`` as secondary
+  // throughout the website, `secondary` and `muted` variants look mostly the same.
+  // TODO: Might be worth to rename `muted` to `header` to avoid disambiguity.
+  color?: "primary" | "secondary" | "tertiary" | "muted" | "success" | "error" | "warning" | "info";
+  
+  // NOTE: Variant "xs" should only be used inside a Banner. No other use case rn.
+  size?: "xs" | "sm" | "md"
+  fullWidth?: false | "fullWidth"
+};
+
+const { class: className, color = "default", size = "md", fullWidth, as = "button", ...attrs } = Astro.props;
+
+const styleClassList = ["btn", "not-prose", color, size, fullWidth, className];
+---
+
+{
+  as === "button" && (
+    <button {...attrs} class:list={styleClassList}>
+      <slot />
+    </button>
+  )
+}
+
+{
+  as === "anchor" && (
+    <a {...attrs} class:list={styleClassList}>
+      <slot />
+    </a>
+  )
+}
+
+{
+  as === "input" && (
+    <>
+      <input {...attrs} class:list={styleClassList} />
+      <slot />
+    </>
+  )
+}
+
+<style>
+  .btn {
+    @apply flex items-center justify-center;
+    @apply gap-2;
+    @apply w-fit px-8 py-4;
+    @apply font-medium;
+    @apply bg-neutral-800 text-neutral-100;
+    @apply rounded-full;
+    @apply focus:outline-none focus:ring-4 ring-offset-4 focus:ring-neutral-500;
+  }
+
+  .btn.sm {
+    @apply px-4 py-2;
+  }
+
+  .btn.xs {
+    @apply px-4 py-1;
+  }
+
+  .btn.fullWidth {
+    @apply w-full;
+  }
+
+  .btn:hover {
+    @apply brightness-150;
+  }
+  .btn:active {
+    @apply scale-95;
+  }
+
+  .btn.secondary {
+    @apply bg-neutral-300 text-neutral-900;
+    @apply hover:bg-neutral-400;
+  }
+
+  .btn.tertiary {
+    @apply bg-transparent text-link-900;
+  }
+
+  .btn.muted {
+    @apply bg-transparent text-neutral-900;
+    @apply hover:bg-neutral-400;
+  }
+
+  .btn.success {
+    @apply bg-success-700 text-success-300;
+    @apply focus:ring-success-500;
+  }
+
+  .btn.error {
+    @apply bg-error-700 text-error-300;
+    @apply focus:ring-error-500;
+  }
+
+  .btn.warning {
+    @apply bg-warning-700 text-warning-300;
+    @apply focus:ring-warning-500;
+  }
+
+  .btn.info {
+    @apply bg-info-700 text-info-300;
+    @apply focus:ring-info-500;
+  }
+</style>

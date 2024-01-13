@@ -1,0 +1,79 @@
+---
+import Box from "./Box.astro";
+import Button from "./Button.astro";
+import Logo from "./Logo.astro";
+
+import { createReader } from "@keystatic/core/reader";
+import keystaticConfig from "../../keystatic.config";
+import DocumentRenderer from "@lib/keystatic/DocumentRenderer.astro";
+import DevNull from "./markdocBlocks/DevNull.astro";
+
+const reader = createReader(process.cwd(), keystaticConfig);
+const footerConfig = await reader.singletons.footer.read();
+const footerContentTree = (await footerConfig?.footer()) ?? [];
+---
+
+{/* TODO: a11y */}
+
+<Box size="full-width" class="bg-neutral-300 relative !rounded-3xl mt-32">
+  <div class="grid md:grid-cols-2 gap-16">
+    <div>
+      <a href="#" title="Ritorna a inizio pagina">
+        <Logo class="absolute h-20 sm:h-48 -top-8 sm:-top-20" />
+      </a>
+      <div id="logoText" class="sm:mt-8">
+        <div class="text-neutral-900 logo-title">In Retromarcia</div>
+        <div class="logo-tagline">Guida di viaggio alla Corea del Sud</div>
+      </div>
+    </div>
+
+    <div class="prose">
+      <DocumentRenderer
+        document={footerContentTree}
+        componentBlocks={{
+          devNull: DevNull,
+        }}
+      />
+
+      <div class="flex flex-wrap gap-2 mt-12">
+        {
+          footerConfig?.links.map((link) => (
+            <Button
+              size="sm"
+              color={link.color ?? "muted"}
+              as="anchor"
+              href={
+                link.link.discriminant === "internal"
+                  ? ""
+                  : link.link.discriminant === "external"
+                    ? link.link.value.url
+                    : /* link.link.discriminant === "email" */ `mailto:${link.link.value}`
+              }
+              target={link.link.discriminant === "external" && link.link.value["_blank"] ? "_blank" : undefined}
+              rel={[
+                // `target="_blank"` automatically implies `noopener` these days
+                link.link.discriminant === "external" && "noreferrer",
+                link.link.discriminant === "external" && link.link.value.nofollow ? "nofollow" : undefined,
+              ].join(" ")}
+            >
+              {link.name}
+            </Button>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</Box>
+
+<style>
+  .logo-title {
+    @apply text-neutral-900 font-serif tracking-tight font-[500] [font-stretch:83%];
+    @apply text-3xl/none sm:text-5xl/none;
+  }
+
+  .logo-tagline {
+    @apply mt-2;
+    @apply text-neutral-800 leading-none;
+    @apply text-lg sm:text-xl;
+  }
+</style>

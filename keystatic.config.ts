@@ -7,6 +7,7 @@ import collection_CoverImages from './src/keystatic/collections/cover-images';
 import singleton_WebsiteConfig from './src/keystatic/singletons/website-config'
 import singleton_Redirects from  './src/keystatic/singletons/redirects'
 import singleton_Organization from './src/keystatic/singletons/organization'
+import singleton_Footer from './src/keystatic/singletons/footer'
 
 import React from 'react';
 
@@ -40,7 +41,7 @@ export default config({
         navigation: {
             "Contenuti": [ 'acquisto', 'coreaDelSud' ],
             "Meta": [ 'tags', 'coverImages', 'uploads' ],
-            "Configurazione": [ 'websiteConfig', 'redirects', 'organization' ],
+            "Configurazione": [ 'websiteConfig', 'redirects', 'organization', 'footer' ],
         }
     },
     collections: {
@@ -51,8 +52,10 @@ export default config({
         coverImages: collection_CoverImages,
     },
     singletons: {
+        // TODO: Might be worth renaming and reorganizing
         websiteConfig: singleton_WebsiteConfig,
         redirects: singleton_Redirects,
         organization: singleton_Organization,
+        footer: singleton_Footer,
     }
 });

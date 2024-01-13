@@ -1,0 +1,82 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+export interface Props extends HTMLAttributes<"div"> {
+  size?: "regular" | "breakout" | "full-width";
+  padding?: "none" | "xs" | "sm" | "md" | "lg" | "xl";
+  prose?: false | "prose" | "prose-80" | "prose-w-full" | "not-prose";
+  ungrid?: false | "ungrid",
+}
+
+const { size = "regular", padding = "md", prose = false, ungrid = false, class: className, ...attrs } = Astro.props;
+
+const proseClasses = [
+  (prose == "prose" || prose == "prose-w-full" || prose == "prose-80") && [
+    "prose prose-custom",
+    "prose-a:underline prose-a:underline-offset-2 prose-a:decoration-2 prose-a:decoration-link-900",
+    "hover:prose-a:text-link-900",
+    "prose-h1:font-serif prose-h1:font-[500] prose-h1:[font-stretch:83%] prose-h1:text-4xl/tight sm:prose-h1:text-5xl/tight lg:prose-h1:text-6xl/tight",
+    "prose-h2:font-serif prose-h2:font-[500] prose-h2:[font-stretch:83%] prose-h2:text-3xl",
+    "prose-h3:font-serif prose-h3:font-[500] prose-h3:[font-stretch:83%] prose-h3:text-2xl",
+    "prose-h4:font-serif prose-h4:font-[500] prose-h4:[font-stretch:83%] prose-h4:text-xl",
+  ],
+  prose == "not-prose" && "not-prose",
+  prose == "prose-80" && "max-w-[80ch]",
+  prose == "prose-w-full" && "max-w-none",
+  ungrid == "ungrid" && "![grid-column:full-width]"
+];
+---
+
+<div class:list={["box", size, padding, ungrid, className]} {...attrs}>
+  <div class:list={[proseClasses]}>
+    <slot />
+  </div>
+</div>
+
+<style is:global>
+  .boxLayout > :not(.breakout, .full-width),
+  .full-width > :not(.breakout, .full-width) {
+    grid-column: regular;
+  }
+
+  .boxLayout > .breakout {
+    grid-column: breakout;
+  }
+
+  .boxLayout > .full-width {
+    grid-column: full-width;
+
+    display: grid;
+    grid-template-columns: inherit;
+  }
+</style>
+
+<style>
+  .box {
+    @apply w-full px-6 lg:px-8;
+    @apply rounded-xl;
+  }
+
+  .box.xs {
+    @apply py-0;
+  }
+
+  .box.xs {
+    @apply py-8 sm:py-12;
+  }
+  .box.sm {
+    @apply py-12 sm:py-16;
+  }
+  .box.md {
+    @apply py-16 sm:py-24;
+  }
+  .box.lg {
+    @apply py-24 sm:py-32;
+  }
+  .box.xl {
+    @apply py-32 sm:py-48 lg:py-56;
+  }
+  .box.ungrid {
+    @apply px-0;
+  }
+</style>

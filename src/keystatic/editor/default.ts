@@ -8,6 +8,7 @@ import Directions from "./components/Directions";
 
 type Props = {
     label: string,
+    description?: string,
 }
 
 export default (props: Props) => {
