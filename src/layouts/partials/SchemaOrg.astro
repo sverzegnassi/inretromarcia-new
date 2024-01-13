@@ -3,17 +3,13 @@ import getFullEntryDefinition from "@lib/keystatic/getFullEntryDefinition";
 import _ from "lodash";
 
 interface Props {
-  collectionName: string;
-  slug: string;
-}
+  entryDefinition: Awaited<ReturnType<typeof getFullEntryDefinition>>;
+};
 
-const { collectionName, slug } = Astro.props;
+const { entryDefinition } = Astro.props;
+
 const webpageFullUrl = new URL(Astro.url.pathname, Astro.site).href;
-
-// Read Keystatic configuration
-const { websiteConfig, organizationConfig, cmsEntry, coverImage, collectionLabel, tags } = await getFullEntryDefinition(
-  { collectionName: collectionName, slug: slug },
-);
+const { websiteConfig, organizationConfig, cmsEntry, coverImage, collectionLabel, tags, slug } = entryDefinition;
 
 // Helpers
 const isNotEmpty = (value: string) => value !== undefined && value !== null && value !== "";
@@ -34,7 +30,7 @@ function safeJsonParse(jsonString: string) {
   try {
     return JSON.parse(jsonString);
   } catch (error) {
-    console.warn("Collection:", collectionName, "-", "Slug:", slug, ":", "Provided JSON string is not valid.");
+    console.warn("Collection:", collectionLabel, "-", "Slug:", slug, ":", "Provided JSON string is not valid.");
     return null;
   }
 }

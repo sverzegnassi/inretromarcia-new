@@ -5,6 +5,7 @@ import AppStoreLinks from "./components/AppStoreLinks";
 import ThirdPartyEmbed from "./components/ThirdPartyEmbed";
 import DevNull from "./components/DevNull";
 import Directions from "./components/Directions";
+import FeaturedArticle from "./components/FeaturedArticle";
 
 type Props = {
     label: string,
@@ -212,6 +213,7 @@ export default (props: Props) => {
                 thirdPartyEmbed: ThirdPartyEmbed(),
                 devNull: DevNull(),
                 directions: Directions(),
+                featuredArticle: FeaturedArticle(),
             }
         })
     }

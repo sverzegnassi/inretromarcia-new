@@ -1,3 +1,37 @@
 ---
 const { file, title, alt, attribution } = Astro.props;
+import { Image } from "astro:assets";
+import type { ImageMetadata } from "astro";
+
+const imageAssets = import.meta.glob<{ default: ImageMetadata }>("/src/assets/uploads/**/*.{jpeg,jpg,png,gif,webp}");
+
+/*
+
+Immagine di <a href="https://unsplash.com/@neom?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">NEOM</a> da <a href="https://unsplash.com/photos/a-woman-scubas-over-a-colorful-coral-reef-jTxhUMyPTrE?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Unsplash</a>
+  
+*/
 ---
+
+<picture>
+  <Image src={imageAssets[file]()} alt={alt} class="markdocImage" />
+  <figcaption>Immagine: {attribution.author} da {attribution.source}</figcaption>
+</picture>
+
+<style>
+  .markdocImage {
+    @apply mx-auto bg-brand-300 rounded shadow;
+  }
+</style>
+
+<script>
+  // Progressive enhancement: animate loading state
+  const images = document.querySelectorAll(".markdocImage");
+
+  images.forEach((element) => {
+    element.classList.add("animate-pulse")
+
+    element.addEventListener("load", () => {
+      element.classList.remove("animate-pulse")
+    });
+  });
+</script>

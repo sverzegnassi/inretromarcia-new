@@ -1,0 +1,32 @@
+---
+import type { DocumentNode } from "@keystatic/core";
+import DocumentRenderer from "@lib/keystatic/DocumentRenderer.astro";
+
+// Content component blocks
+import AppStoreLinks from "@components/markdocBlocks/AppStoreLinks.astro";
+import DevNull from "@components/markdocBlocks/DevNull.astro";
+import Directions from "@components/markdocBlocks/Directions.astro";
+import FeaturedArticle from "@components/markdocBlocks/FeaturedArticle.astro";
+import ImageComponent from "@components/markdocBlocks/ImageComponent.astro";
+import ThirdPartyEmbed from "@components/markdocBlocks/ThirdPartyEmbed.astro";
+import UploadComponent from "@components/markdocBlocks/UploadComponent.astro";
+
+interface Props {
+    document: DocumentNode[]
+}
+
+const { document } = Astro.props
+---
+
+<DocumentRenderer
+  document={document}
+  componentBlocks={{
+    appStoreLinks: AppStoreLinks,
+    devNull: DevNull,
+    directions: Directions,
+    featuredArticle: FeaturedArticle,
+    image: ImageComponent,
+    thirdPartyEmbed: ThirdPartyEmbed,
+    uploadComponent: UploadComponent,
+  }}
+/>

@@ -1,6 +1,7 @@
 import { createReader, type Entry } from "@keystatic/core/reader";
 import keystaticConfig from "../../../keystatic.config";
 import type { ImageMetadata } from 'astro';
+import _ from "lodash";
 
 
 interface Props {
@@ -23,9 +24,14 @@ export default async function (props: Props) {
     const cmsEntry = (await reader.collections[collectionName as CollectionName].read(slug)) as CmsEntry;
 
     // Extend Keystatic `coverImage` object with the properties returned by astro:assets
-    type CoverImage = (Awaited<ReturnType<typeof reader.collections.coverImages.read>> & Partial<ImageMetadata>) | null;
+    type CoverImage = (
+        Awaited<ReturnType<typeof reader.collections.coverImages.read>>
+        & Partial<ImageMetadata>
+        & { object?: Promise<{ default: ImageMetadata }> }
+    ) | null;
+
     const coverImage: CoverImage = await reader.collections.coverImages.read(cmsEntry.image ?? "");
-    
+
     if (coverImage?.file) {
         const coverImageAssets = import.meta.glob<{ default: ImageMetadata }>
             ('/src/assets/cover-images/**/file.{jpeg,jpg,png,gif,webp}');
@@ -37,18 +43,29 @@ export default async function (props: Props) {
         // resulting in a final `/_astro/<file-name>.<hash>.<extension>` path
         // for the optimized resource.
 
-        Object.assign(coverImage, (await coverImageAssets[coverImage.file]()).default)
+        const coverImageObject = coverImageAssets[coverImage.file];
+
+        Object.assign(coverImage, { object: coverImageObject() })
+        Object.assign(coverImage, (await coverImageObject()).default)
     }
 
     // Extend Keystatic collection entry `socialCard` object with the properties returned by astro:assets
-    type SocialCard = (typeof cmsEntry.socialCard & Partial<ImageMetadata>) | null;
+    type SocialCard = (
+        typeof cmsEntry.socialCard
+        & Partial<ImageMetadata>
+        & { object?: Promise<{ default: ImageMetadata }> }
+    ) | null;
+
     const socialCard: SocialCard = cmsEntry.socialCard
-    
+
     if (socialCard?.image) {
         const assets = import.meta.glob<{ default: ImageMetadata }>
             ('/src/assets/social-cards/**/image.{jpeg,jpg,png,gif,webp}');
 
-        Object.assign(socialCard, (await assets[socialCard.image]()).default)
+        const socialCardImageObject = assets[socialCard.image];
+
+        Object.assign(socialCard, { object: socialCardImageObject() })
+        Object.assign(socialCard, (await socialCardImageObject()).default)
     }
 
     // Extend Keystatic collection entry `tag` with the information from `tags` collection
@@ -83,6 +100,7 @@ export default async function (props: Props) {
         coverImage: coverImage,
         socialCard: socialCard,
         collectionLabel: collectionConfig.label,
-        tags: tags
+        slug: _.kebabCase(collectionName) + "/" + slug,
+        tags: tags,
     }
 }

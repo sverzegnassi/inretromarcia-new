@@ -1,3 +1,67 @@
 ---
-const { poiName, addressLine1, addressLine2, maps } = Astro.props
+import Button from "@components/Button.astro";
+
+const { poiName, addressLine1, addressLine2, maps } = Astro.props;
 ---
+
+<aside class="not-prose directions">
+  <div class="labels">
+    <p class="font-bold text-neutral-900 text-lg mb-2">{poiName}</p>
+    {addressLine1 && <div class="leading-tight mb-1">{addressLine1}</div>}
+    {addressLine2 && <div class="leading-tight">{addressLine2}</div>}
+  </div>
+
+  <div class="flex md:ml-auto md:mr-0 mx-auto items-center flex-shrink-0 space-x-4">
+    {
+      maps.map((map: any) => {
+        switch (map.discriminant) {
+          case "naver":
+            return (
+              <Button as="anchor" class="!items-end" rel="nofollow noopener noreferrer" target="_blank" href=`https://m.place.naver.com/place/${map.value}/home`>
+                <svg class="size-8" viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <>
+                    <path
+                      fill-rule="evenodd"
+                      clip-rule="evenodd"
+                      d="M494.83 676S370.978 842.062 371.831 842.749c1.234.994 68.107 1.25 326.859 1.25H1024V676H494.83Z"
+                      fill="currentColor"
+                      fill-opacity=".5"
+                    />
+                    <path
+                      fill-rule="evenodd"
+                      clip-rule="evenodd"
+                      d="M355.091 109.009c-37.243 3.117-75.097 14.295-106.649 31.494-68.707 37.452-118.709 104.413-134.525 180.151-11.47 54.927-5.575 112.985 16.616 163.656 9.333 21.312 9.487 21.548 95.435 146.69 6.988 10.175 23.199 33.8 36.025 52.5 12.825 18.7 25.641 37.375 28.479 41.5 2.839 4.125 21.957 32.025 42.485 62s38.021 55.063 38.874 55.75C373.065 843.744 494.83 676 494.83 676l3.441-4.75c1.893-2.612 14.684-21.175 28.426-41.25a59536.704 59536.704 0 0 1 51.785-75.5c14.74-21.45 29.421-43.685 32.623-49.411 37.224-66.566 43.078-153.168 15.181-224.589-14.205-36.368-33.455-65.782-61.23-93.556C527.98 149.868 484.399 125.82 434 114.628c-23.531-5.225-55.989-7.537-78.909-5.619ZM276 376v92h67l.036-47.25.036-47.25 2.214 2.725c1.218 1.499 15.714 22.739 32.214 47.2l30 44.474 34.25.051L476 468V284h-66.98l-.26 47.25-.26 47.25-6-8.722c-3.3-4.797-17.7-26.043-32-47.214l-26-38.491-34.25-.036L276 284v92Z"
+                      fill="currentColor"
+                    />
+                  </>
+                </svg>
+
+                <span class="ml-4 flex items-start flex-col leading-none">
+                  <span class="text-sm mb-1">Apri in</span>
+                  <span class="font-medium">Naver Maps</span>
+                </span>
+              </Button>
+            );
+            default:
+              // TODO: Implement missing map providers
+              return (<div class="bg-error-100 text-error-700">Not implemented yet</div>)
+        }
+      })
+    }
+  </div>
+</aside>
+
+<style>
+  .directions {
+    @apply px-5 py-12;
+    @apply flex items-center md:flex-row flex-col;
+    @apply bg-neutral-300 shadow-inner rounded-xl;
+
+    & .labels {
+      @apply flex flex-col;
+      @apply md:pr-16 md:mb-0 mb-8 pr-0;
+      @apply w-full md:w-auto;
+      @apply md:text-left text-center;
+    }
+  }
+</style>
