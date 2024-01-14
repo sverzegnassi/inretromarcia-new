@@ -4,14 +4,13 @@ import getFullEntryDefinition from "@lib/keystatic/getFullEntryDefinition";
 import '@fontsource-variable/roboto-serif/wdth.css';
 
 export interface Props {
-  collectionName?: string;
-  slug?: string;
+  entryDefinition?: Awaited<ReturnType<typeof getFullEntryDefinition>>;
 
-  // Title fallback, if both `collectionName` and `slug` are not defined
+  // Title fallback, if `entryDefinition`` is not defined
   title?: string;
 }
 
-const { collectionName, slug, title } = Astro.props;
+const { entryDefinition, title } = Astro.props;
 
 let renderedTitle = title ?? "";
 let renderedDescription = "";
@@ -19,66 +18,63 @@ let renderedCanonicalURL = "";
 let websiteLanguage = "en";
 let rssEnabled = false;
 
-if (collectionName && slug) {
-  const { websiteConfig, cmsEntry } = await getFullEntryDefinition({
-    collectionName: collectionName,
-    slug: slug,
-  });
 
-  /*
-    Title render priority:
-        1) Page MetaTitle + Website.TitleShort
-        2) Page MetaTitle
-        3) Page Title + Website.TitleShort
-        4) Page Title
-        5) Website.TitleLong
-        6) Website.TitleShort
-        7) Give up (`undefined`)
-  */
+/*
+  Title render priority:
+      1) Page MetaTitle + Website.TitleShort
+      2) Page MetaTitle
+      3) Page Title + Website.TitleShort
+      4) Page Title
+      5) Website.TitleLong
+      6) Website.TitleShort
+      7) Give up (`undefined`)
+*/
 
-  // Find the first non-falsy title from the array
-  const validTitle = [cmsEntry.meta.title, cmsEntry.title].find((title) => title);
-  const delimiter = websiteConfig?.general.titleDelimiter ?? " | ";
-
-  renderedTitle = (function () {
-    if (validTitle) {
-      return websiteConfig?.general.titleShort
-        ? `${validTitle} ${delimiter} ${websiteConfig?.general.titleShort}`
-        : validTitle;
-    }
-
-    return websiteConfig?.general.titleLong || websiteConfig?.general.titleShort || "";
-  })();
-
-  /*
-    MetaDescription render priority:
-      1) Page MetaDescription
-      2) Page Excerpt
-      3) Auto-generate an excerpt from the content (Not implemented)
-      4) Website MetaDescription
-      5) Give up (`undefined`)
-  */
-
-  renderedDescription = cmsEntry.meta.description || cmsEntry.excerpt || websiteConfig?.general.description || "";
-
-  /*
-    Canonical URL render priority
-        1) As defined in page front matter
-        2) With Astro.site (must be set in website config), the page URL
-        3) Safe guard: `undefined`
-  */
-  if (cmsEntry.meta.canonicalURL) {
-    renderedCanonicalURL = cmsEntry.meta.canonicalURL;
-  } else {
-    renderedCanonicalURL = Astro.site ? new URL(Astro.url.pathname, Astro.site).href : "";
+// Find the first non-falsy title from the array
+const validTitle = [entryDefinition?.cmsEntry.meta.title, entryDefinition?.cmsEntry.title].find((title) => title);
+const delimiter = entryDefinition?.websiteConfig?.general.titleDelimiter ?? " | ";
+renderedTitle = (function () {
+  if (validTitle) {
+    return entryDefinition?.websiteConfig?.general.titleShort
+      ? `${validTitle} ${delimiter} ${entryDefinition?.websiteConfig?.general.titleShort}`
+      : validTitle;
   }
+  return entryDefinition?.websiteConfig?.general.titleLong || entryDefinition?.websiteConfig?.general.titleShort || "";
+})();
 
-  // Language
-  websiteLanguage = websiteConfig?.general.lang ?? "en";
 
-  // RSS
-  rssEnabled = websiteConfig?.rss.enabled ?? false;
+/*
+  MetaDescription render priority:
+    1) Page MetaDescription
+    2) Page Excerpt
+    3) Auto-generate an excerpt from the content (Not implemented)
+    4) Website MetaDescription
+    5) Give up (`undefined`)
+*/
+
+renderedDescription = entryDefinition?.cmsEntry.meta.description || entryDefinition?.cmsEntry.excerpt || entryDefinition?.websiteConfig?.general.description || "";
+
+
+/*
+  Canonical URL render priority
+      1) As defined in page front matter
+      2) With Astro.site (must be set in website config), the page URL
+      3) Safe guard: `undefined`
+*/
+
+if (entryDefinition?.cmsEntry.meta.canonicalURL) {
+  renderedCanonicalURL = entryDefinition?.cmsEntry.meta.canonicalURL;
+} else {
+  renderedCanonicalURL = Astro.site ? new URL(Astro.url.pathname, Astro.site).href : "";
 }
+
+
+// Language
+websiteLanguage = entryDefinition?.websiteConfig?.general.lang ?? "en";
+
+
+// RSS
+rssEnabled = entryDefinition?.websiteConfig?.rss.enabled ?? false;
 ---
 
 <html lang={websiteLanguage}>

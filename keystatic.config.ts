@@ -45,6 +45,7 @@ export default config({
         }
     },
     collections: {
+        // IMPORTANT: The key should be in camelCase, mirroring the structure of the path.
         acquisto: collection_GuideAllAcquisto,
         coreaDelSud: collection_CoreaDelSud,
         tags: collection_Tags,

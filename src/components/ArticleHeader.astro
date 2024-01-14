@@ -1,0 +1,69 @@
+---
+import getFullEntryDefinition from "@lib/keystatic/getFullEntryDefinition";
+import Box from "@components/Box.astro";
+import { Image } from "astro:assets";
+
+interface Props {
+  entryDefinition: Awaited<ReturnType<typeof getFullEntryDefinition>>;
+}
+
+const { entryDefinition } = Astro.props;
+const { cmsEntry, coverImage, tags, collectionLabel, slug } = entryDefinition;
+---
+
+<Box prose="prose-80" class="[&>*]:mx-auto bg-brand-300 !rounded-3xl shadow-2xl shadow-brand-300/50">
+  <div class="tags">
+    {
+      () => {
+        // Prevent whitespaces between elements by returning an array
+        return [
+          <a href={Astro.url.href.replace(slug, "")}>{collectionLabel}</a>,
+          tags?.map((tag) => {
+            if (tag.breadcrumbUrl) {
+              return <a href={tag.breadcrumbUrl}>{tag.name}</a>;
+            }
+
+            return <span>{tag.name}</span>;
+          }),
+        ];
+      }
+    }
+  </div>
+  <h1 class="mb-12">{cmsEntry.title}</h1>
+  <p>{cmsEntry.excerpt}</p>
+</Box>
+
+<Box padding="sm" prose="prose-w-full" class="max-w-[105ch] mx-auto">
+  {
+    coverImage?.object && (
+      <picture>
+        <Image src={coverImage.object} alt={coverImage.alt} class="rounded" />
+
+        <figcaption>
+          Immagine: {coverImage.attribution.author} da {coverImage.attribution.source}
+        </figcaption>
+      </picture>
+    )
+  }
+</Box>
+
+<style>
+  .tags {
+    @apply mb-2 py-2 rounded-lg w-fit;
+    @apply text-lg tracking-tight;
+
+    * {
+      @apply !text-neutral-900;
+      @apply !decoration-brand-500 !decoration-2 hover:text-link-900 hover:!decoration-link-900;
+
+      /* Add a comma at the end of each element */
+      &:not(:last-child) {
+        &::after {
+          content: ",";
+          display: inline-block;
+          margin-right: .5ch;
+        }
+      }
+    }
+  }
+</style>

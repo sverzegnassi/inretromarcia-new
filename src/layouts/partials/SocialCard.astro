@@ -1,19 +1,14 @@
 ---
-import getFullEntryDefinition from '@lib/keystatic/getFullEntryDefinition';
+import getFullEntryDefinition from "@lib/keystatic/getFullEntryDefinition";
 
 interface Props {
-  collectionName: string;
-  slug: string;
-}
+  entryDefinition: Awaited<ReturnType<typeof getFullEntryDefinition>>;
+};
 
-const { collectionName, slug } = Astro.props;
+const { entryDefinition } = Astro.props;
+
 const webpageFullUrl = new URL(Astro.url.pathname, Astro.site).href;
-
-// Read Keystatic configuration
-const { websiteConfig, cmsEntry, coverImage, socialCard } = await getFullEntryDefinition(
-  { collectionName: collectionName, slug: slug },
-);
-
+const { websiteConfig, cmsEntry, coverImage, socialCard } = entryDefinition;
 ---
 
 <meta property="og:type"         content="article">

@@ -1,0 +1,65 @@
+---
+import BaseLayout from "@layouts/BaseLayout.astro";
+import BoxLayout from "@components/BoxLayout.astro";
+import Box from "@components/Box.astro";
+import NavigationBar from "@components/NavigationBar.astro";
+import ArticleHeader from "@components/ArticleHeader.astro";
+import Footer from "@components/Footer.astro";
+
+// Meta
+import SchemaOrg from "@layouts/partials/SchemaOrg.astro";
+import SocialCard from "@layouts/partials/SocialCard.astro";
+
+// Keystatic
+import { createReader } from "@keystatic/core/reader";
+import keystaticConfig from "../../../keystatic.config";
+import getFullEntryDefinition from "@lib/keystatic/getFullEntryDefinition";
+import DefaultKeystaticDocumentRenderer from "@components/DefaultKeystaticDocumentRenderer.astro";
+
+export async function getStaticPaths() {
+  const reader = createReader(process.cwd(), keystaticConfig);
+
+  const collectionEntries = (await reader.collections.coreaDelSud.all()).filter((entry) => {
+    return (import.meta.env.PROD && entry.entry.draft !== true) || true;
+  });
+
+  return collectionEntries.map((entry) => ({
+    params: { slug: entry.slug === "index" ? undefined : entry.slug },
+  }));
+}
+
+const { slug } = Astro.params;
+const collectionEntry = await getFullEntryDefinition({ collectionName: "coreaDelSud", slug: slug ?? "index" });
+
+const { cmsEntry } = collectionEntry;
+const contentTree = (await cmsEntry.content()) ?? [];
+---
+
+<BaseLayout entryDefinition={collectionEntry}>
+  <SocialCard slot="codeInjectionHeader" entryDefinition={collectionEntry} />
+  {Astro.site && <SchemaOrg slot="codeInjectionHeader" entryDefinition={collectionEntry} />}
+  <Fragment slot="codeInjectionHeader" set:html={cmsEntry.codeInjection.pageHeader} />
+
+  <BoxLayout>
+    <NavigationBar />
+    {
+      /* Slug is defined = Any page except "index" */
+      slug ? (
+        <article>
+          <header>
+            <ArticleHeader entryDefinition={collectionEntry} />
+          </header>
+          <Box prose="prose-80" class="[&>*]:mx-auto" id="article-start">
+            <DefaultKeystaticDocumentRenderer document={contentTree} />
+          </Box>
+        </article>
+      ) : (
+        /* Slug is undefined = "index" page */
+        <DefaultKeystaticDocumentRenderer document={contentTree} />
+      )
+    }
+    <Footer />
+  </BoxLayout>
+
+  <Fragment slot="codeInjectionFooter" set:html={cmsEntry.codeInjection.pageFooter} />
+</BaseLayout>

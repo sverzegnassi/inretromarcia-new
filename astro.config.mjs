@@ -1,7 +1,6 @@
 import { defineConfig } from 'astro/config';
 import tailwind from "@astrojs/tailwind";
 import react from "@astrojs/react";
-import markdoc from "@astrojs/markdoc";
 import keystatic from '@keystatic/astro';
 import sitemap from "@astrojs/sitemap";
 import { readFile } from "fs/promises";
@@ -30,7 +29,7 @@ try {
   console.warn("Astro Sitemap integration and Schema.org extension won't be activated in this build.");
 }
 
-const defaultIntegrations = [tailwind(), react(), markdoc(), keystatic()];
+const defaultIntegrations = [tailwind(), react(), keystatic()];
 activeIntegrations.push(defaultIntegrations);
 
 // https://astro.build/config
