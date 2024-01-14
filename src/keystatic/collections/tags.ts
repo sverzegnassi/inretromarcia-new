@@ -10,7 +10,7 @@ export default collection({
         title: fields.slug({name: { label: 'Nome' } }),
         breadcrumbUrl: fields.pathReference({
             label: "Link alla sezione correlata",
-            pattern: 'src/content/**/*.mdoc'
+            pattern: 'src/data/content/**/*.mdoc'
         })
     },
 })

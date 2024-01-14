@@ -39,7 +39,7 @@ export default singleton({
                             validation: {
                                 isRequired: true
                             },
-                            pattern: "src/content/**/*.mdoc"
+                            pattern: "src/data/content/**/*.mdoc"
                         }),
                         external: fields.object({
                             url: fields.url({

@@ -77,7 +77,7 @@ export default async function (props: Props) {
     const tags = cmsEntry.tags.map((tag, index) => {
         const tagEntry = tagsCollection.find((t) => t.slug === tag)?.entry
         
-        const slug = tagEntry?.breadcrumbUrl?.replace("src/content", "").replace(".mdoc", "");
+        const slug = tagEntry?.breadcrumbUrl?.replace("src/data/content", "").replace(".mdoc", "");
         const title = tagEntry?.title
 
         // IMPORTANT: Google's Rich Results Validator requires all the breadcrumb items

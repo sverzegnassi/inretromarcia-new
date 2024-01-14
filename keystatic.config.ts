@@ -48,11 +48,11 @@ export default config({
         // IMPORTANT: The key should be in camelCase, mirroring the structure of the path.
         acquisto: defaultContentCollection({
             label: "Guide all'acquisto",
-            path: 'src/content/acquisto/*',
+            path: 'src/data/content/acquisto/*',
         }),
         coreaDelSud: defaultContentCollection({
             label: "Corea del Sud",
-            path: 'src/content/corea-del-sud/**',
+            path: 'src/data/content/corea-del-sud/**',
         }),
         tags: collection_Tags,
         uploads: collection_Uploads,
