@@ -1,35 +1,20 @@
 ---
 import { type DocumentElement, type DocumentNode } from "@keystatic/core";
-import { Code } from "astro/components";
 import documentRendererSchema from "./documentRendererSchema";
 
-// To enable support for `code`, we utilize Astro's native integration with Shiki.
+// To enable support for `code` DocumentElement type, we utilize Astro's native integration with Shiki.
 // Prism appears to be soft-deprecated.
 // Ref. https://github.com/withastro/roadmap/blob/main/proposals/0004-replace-prism-with-shiki.md
-
-import type {
-  BuiltinLanguage,
-  BuiltinTheme,
-  LanguageRegistration,
-  SpecialLanguage,
-  ThemeRegistration,
-  ThemeRegistrationRaw,
-} from "shikiji";
+import { Code } from "astro/components";
+import { type ShikiConfig } from "astro";
 import { bundledLanguages } from "shikiji/langs";
+import type { BuiltinLanguage, LanguageRegistration, SpecialLanguage } from "shikiji";
 type ShikiSupportedLanguage = BuiltinLanguage | SpecialLanguage | LanguageRegistration;
-
-// Shiki configuration aligned with the Astro `<Code>` native component.
-// https://github.com/withastro/astro/blob/05628aaa3c9a3702b59cbf3d0e99abf66df651df/packages/astro/components/Code.astro#L9
-type CodeConfiguration = {
-  theme?: BuiltinTheme | ThemeRegistration | ThemeRegistrationRaw;
-  experimentalThemes?: Record<string, BuiltinTheme | ThemeRegistration | ThemeRegistrationRaw>;
-  wrap?: boolean | null;
-};
 
 export interface Props {
   document: DocumentNode[];
-  codeConfiguration?: CodeConfiguration;
-  componentBlocks?: Record<string, (_props: Record<string, any>) => any>;   // Type of an Astro component
+  codeConfiguration?: Partial<Omit<ShikiConfig, "langs">>;
+  componentBlocks?: Record<string, (_props: Record<string, any>) => any>; // Type of an Astro component
 }
 
 const { document, codeConfiguration, componentBlocks } = Astro.props;
@@ -109,7 +94,7 @@ const { document, codeConfiguration, componentBlocks } = Astro.props;
           textAlign: assertedNode.textAlign,
 
           /* `heading` */
-          innerText: assertedNode.children.map(child => child.text),
+          innerText: assertedNode.children.map((child) => child.text),
 
           /* `layout` */
           layout: assertedNode.layout,
