@@ -1,8 +1,8 @@
 import { createReader, type Entry } from "@keystatic/core/reader";
 import keystaticConfig from "../../../keystatic.config";
+import defaultContentCollection from "src/keystatic/defaultContentCollection";
 import type { ImageMetadata } from 'astro';
 import _ from "lodash";
-
 
 interface Props {
     collectionName: string;
@@ -12,11 +12,15 @@ interface Props {
 export default async function (props: Props) {
     const { collectionName, slug } = props;
 
+    /**
+    * NOTE: A new instance of `reader` is created each time this function is invoked.
+    * I've run a few benchmarks, and the overhead is currently minimal. However, consider converting it
+    * into a singleton in the future if optimization becomes necessary.
+    */
     const reader = createReader(process.cwd(), keystaticConfig);
 
-    // FIXME: At the moment, only "coreaDelSud" collection is supported.
     type CollectionName = keyof typeof reader.collections;
-    type CmsEntry = Entry<(typeof keystaticConfig)["collections"]["coreaDelSud"]>;
+    type CmsEntry = Entry<ReturnType<typeof defaultContentCollection>>;
 
     const websiteConfig = await reader.singletons.websiteConfig.read();
     const organizationConfig = await reader.singletons.organization.read();

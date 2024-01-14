@@ -1,6 +1,6 @@
 import { config } from '@keystatic/core';
-import collection_GuideAllAcquisto from './src/keystatic/collections/guide-all-acquisto'
-import collection_CoreaDelSud from './src/keystatic/collections/corea-del-sud'
+import defaultContentCollection from './src/keystatic/defaultContentCollection'
+
 import collection_Tags from './src/keystatic/collections/tags'
 import collection_Uploads from './src/keystatic/collections/uploads'
 import collection_CoverImages from './src/keystatic/collections/cover-images';
@@ -46,8 +46,14 @@ export default config({
     },
     collections: {
         // IMPORTANT: The key should be in camelCase, mirroring the structure of the path.
-        acquisto: collection_GuideAllAcquisto,
-        coreaDelSud: collection_CoreaDelSud,
+        acquisto: defaultContentCollection({
+            label: "Guide all'acquisto",
+            path: 'src/content/acquisto/*',
+        }),
+        coreaDelSud: defaultContentCollection({
+            label: "Corea del Sud",
+            path: 'src/content/corea-del-sud/**',
+        }),
         tags: collection_Tags,
         uploads: collection_Uploads,
         coverImages: collection_CoverImages,
