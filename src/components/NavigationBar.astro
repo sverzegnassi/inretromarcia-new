@@ -2,7 +2,8 @@
 import Box from "./Box.astro";
 import Button from "./Button.astro";
 import Logo from "./Logo.astro";
-import SearchIcon from "./SearchIcon.astro";
+import TablerIcon from "./TablerIcon.astro";
+
 ---
 
 <Box id="navbar" size="full-width" padding="none" class="[&>*]:flex [&>*]:justify-between [&>*]:items-center">
@@ -17,7 +18,7 @@ import SearchIcon from "./SearchIcon.astro";
   <!-- TODO: Search -->
   <Button color="muted" id="searchBtn" class="!gap-3">
     <span class="text-xl" id="searchBtnText">Search</span>
-    <SearchIcon class="size-6" />
+    <TablerIcon class="size-6" iconName="search" />
   </Button>
 </Box>
 
