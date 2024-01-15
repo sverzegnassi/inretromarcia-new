@@ -1,0 +1,114 @@
+---
+import BaseLayout from "@layouts/BaseLayout.astro";
+import BoxLayout from "@components/BoxLayout.astro";
+import Box from "@components/Box.astro";
+import NavigationBar from "@components/NavigationBar.astro";
+import ArticleHeader from "@components/ArticleHeader.astro";
+import Footer from "@components/Footer.astro";
+import _ from "lodash";
+
+// Meta
+import SchemaOrg from "@layouts/partials/SchemaOrg.astro";
+import SocialCard from "@layouts/partials/SocialCard.astro";
+
+// Keystatic
+import { createReader, type Entry } from "@keystatic/core/reader";
+import type { Format } from "@keystatic/core";
+import keystaticConfig from "../../keystatic.config";
+import defaultContentCollection from "../keystatic/defaultContentCollection";
+import getFullEntryDefinition from "@lib/keystatic/getFullEntryDefinition";
+import DefaultKeystaticDocumentRenderer from "@components/DefaultKeystaticDocumentRenderer.astro";
+
+export async function getStaticPaths() {
+  const reader = createReader(process.cwd(), keystaticConfig);
+
+  // Identify content collections
+  const collections = reader.config.collections;
+  type CollectionKey = keyof typeof reader.config.collections;
+
+  const contentCollections = Object.keys(reader.config.collections).filter((key) => {
+    const collectionFormat = collections[key as CollectionKey].format as Format;
+    return typeof collectionFormat === "object" && collectionFormat.contentField !== undefined;
+  });
+
+  // Fetch all the entries from content collections
+  const collectionEntries = _.flatten(
+    await Promise.all(
+      contentCollections.map(async (collection) => {
+        const entries = (await reader.collections[collection as CollectionKey].all()).filter((entry) => {
+          // TODO: Consider consolidating all collections created using `defaultContentCollection`
+          // into a single collection. This includes landing pages and `taxonomy` pages,
+          // since introducing a different configuration via a new `fields.document()` default
+          // or `fields.blocks()` adds way more complexity.
+          //
+          // For landing pages and taxonomy pages, add a "layout" field with two options (e.g. `page` or `post`).
+          // Introduce ad-hoc `componentBlocks` to provide sections on landing pages or lists
+          // of tagged posts on taxonomy pages.
+          //
+          // Apart for having to type a longer `slug`, and a less-organized dashboard in Keystatic,
+          // there's probably no reason for keeping any separation in place.
+
+          const assertedEntry = entry.entry as Entry<ReturnType<typeof defaultContentCollection>>;
+          return (import.meta.env.PROD && assertedEntry.draft !== true) || true;
+        });
+
+        return entries.map((entry) => ({
+          ...entry,
+          collection: collection,
+          collectionSlug: entry.slug,
+          slug: _.kebabCase(collection) + "/" + entry.slug.replace("index", ""),
+        }));
+      }),
+    ),
+  );
+
+  // Build the index of static pages
+  return collectionEntries.map((entry) => ({
+    params: {
+      slug: entry.slug,
+    },
+    props: {
+      collection: entry.collection,
+      collectionSlug: entry.collectionSlug,
+    },
+  }));
+}
+
+const { collectionSlug, collection } = Astro.props;
+
+const collectionEntry = await getFullEntryDefinition({ collectionName: collection, slug: collectionSlug });
+
+const { cmsEntry } = collectionEntry;
+const contentTree = (await cmsEntry.content()) ?? [];
+---
+
+<BaseLayout entryDefinition={collectionEntry}>
+  <SocialCard slot="codeInjectionHeader" entryDefinition={collectionEntry} />
+  {Astro.site && <SchemaOrg slot="codeInjectionHeader" entryDefinition={collectionEntry} />}
+  <Fragment slot="codeInjectionHeader" set:html={cmsEntry.codeInjection.pageHeader} />
+
+  <BoxLayout>
+    <NavigationBar />
+    {
+      // TODO: Consider the addition of a configuration field enabling the switch
+      // between two layouts, such as 'page' and 'post'.
+      collectionSlug !== "index" ? (
+        <article data-pagefind-body>
+          <header>
+            <ArticleHeader entryDefinition={collectionEntry} />
+          </header>
+          <Box prose="prose-80" class="[&>*]:mx-auto" id="article-start">
+            <DefaultKeystaticDocumentRenderer document={contentTree} />
+          </Box>
+        </article>
+      ) : (
+        <main data-pagefind-body>
+          <DefaultKeystaticDocumentRenderer document={contentTree} />
+        </main>
+      )
+    }
+    <Footer />
+  </BoxLayout>
+
+  <Fragment slot="codeInjectionFooter" set:html={cmsEntry.codeInjection.pageFooter} />
+</BaseLayout>
