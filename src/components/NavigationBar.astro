@@ -4,6 +4,13 @@ import Button from "./Button.astro";
 import Logo from "./Logo.astro";
 import TablerIcon from "./TablerIcon.astro";
 
+import { createReader } from "@keystatic/core/reader";
+import keystaticConfig from "../../keystatic.config";
+import SearchDialog from "./SearchDialog.astro";
+
+const reader = createReader(process.cwd(), keystaticConfig);
+const enableSearchFunctionality = (await reader.singletons.websiteConfig.read())?.search.enabled ?? false
+
 ---
 
 <Box id="navbar" size="full-width" padding="none" class="[&>*]:flex [&>*]:justify-between [&>*]:items-center">
@@ -15,11 +22,18 @@ import TablerIcon from "./TablerIcon.astro";
       </div>
   </Button>
 
-  <!-- TODO: Search -->
-  <Button color="muted" id="searchBtn" class="!gap-3">
-    <span class="text-xl" id="searchBtnText">Search</span>
-    <TablerIcon class="size-6" iconName="search" />
-  </Button>
+  { enableSearchFunctionality &&
+    <Button
+      color="muted"
+      id="searchBtn"
+      class="!gap-3"
+      onclick="document.getElementById('searchDialog').showModal();"
+    >
+      <span class="text-xl" id="searchBtnText">Search</span>
+      <TablerIcon class="size-6" iconName="search" />
+    </Button>
+    <SearchDialog id="searchDialog" />
+  }
 </Box>
 
 <style>

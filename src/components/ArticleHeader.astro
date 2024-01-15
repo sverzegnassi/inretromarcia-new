@@ -37,7 +37,12 @@ const { cmsEntry, coverImage, tags, collectionLabel, slug } = entryDefinition;
   {
     coverImage?.object && (
       <picture>
-        <Image src={coverImage.object} alt={coverImage.alt} class="rounded" />
+        <Image
+          src={coverImage.object}
+          alt={coverImage.alt}
+          class="rounded"
+          data-pagefind-meta="image[src], image_alt[alt]"
+        />
 
         <figcaption>
           Immagine: {coverImage.attribution.author} da {coverImage.attribution.source}
@@ -61,7 +66,7 @@ const { cmsEntry, coverImage, tags, collectionLabel, slug } = entryDefinition;
         &::after {
           content: ",";
           display: inline-block;
-          margin-right: .5ch;
+          margin-right: 0.5ch;
         }
       }
     }

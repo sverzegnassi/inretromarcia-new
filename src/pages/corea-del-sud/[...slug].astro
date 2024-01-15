@@ -45,7 +45,7 @@ const contentTree = (await cmsEntry.content()) ?? [];
     {
       /* Slug is defined = Any page except "index" */
       slug ? (
-        <article>
+        <article data-pagefind-body>
           <header>
             <ArticleHeader entryDefinition={collectionEntry} />
           </header>
@@ -55,7 +55,9 @@ const contentTree = (await cmsEntry.content()) ?? [];
         </article>
       ) : (
         /* Slug is undefined = "index" page */
-        <DefaultKeystaticDocumentRenderer document={contentTree} />
+        <main data-pagefind-body>
+          <DefaultKeystaticDocumentRenderer document={contentTree} />
+        </main>
       )
     }
     <Footer />

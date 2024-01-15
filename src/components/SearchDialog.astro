@@ -1,0 +1,165 @@
+---
+import Dialog from "./Dialog.astro";
+
+interface Props {
+  id: string;
+}
+
+const { id } = Astro.props;
+---
+
+<Dialog id={id} class="searchDialog">
+  <div id="pagefind-search"></div>
+</Dialog>
+
+<script>
+  // No TypeScript definitions available;
+  // https://github.com/CloudCannon/pagefind/issues/334
+  import { PagefindUI } from "@pagefind/default-ui";
+
+  window.addEventListener("DOMContentLoaded", (_event) => {
+    new PagefindUI({
+      element: "#pagefind-search",
+      showSubResults: true,
+      autofocus: true,
+    });
+  });
+</script>
+
+<style is:global>
+  .searchDialog[open] {
+    @apply !min-w-[50dvw] !min-h-[50dvh];
+    @apply flex flex-col;
+  }
+
+  #pagefind-search {
+    @apply flex-grow;
+  }
+
+  .pagefind-ui__result {
+    @apply flex items-start gap-4 p-4;
+    @apply border-t border-neutral-300;
+
+    &:last-of-type {
+      @apply border-b;
+    }
+  }
+  .pagefind-ui__result-nested {
+    @apply flex flex-col pl-4;
+
+    &:first-of-type {
+      @apply pt-2;
+    }
+
+    .pagefind-ui__result-link {
+      @apply relative text-sm;
+    }
+    .pagefind-ui__result-link::before {
+      content: "\2937  ";
+      @apply absolute top-0 right-[calc(100%_+_1ch)];
+    }
+  }
+
+  .pagefind-ui__result-thumb {
+    @apply w-1/4 max-w-72 mt-2 mr-2 aspect-[3/2];
+    @apply relative;
+    @apply rounded-md;
+
+    .pagefind-ui__result-image {
+      @apply absolute block;
+      @apply w-auto h-full aspect-[3/2] object-cover;
+      @apply rounded-lg;
+      @apply text-xs;
+    }
+  }
+  .pagefind-ui__result-inner {
+    @apply flex flex-col items-start;
+    @apply flex-1;
+    @apply mt-2;
+
+    .pagefind-ui__result-title {
+      @apply inline-block;
+      @apply font-medium text-lg my-0;
+
+      .pagefind-ui__result-link {
+        @apply text-neutral-900;
+        @apply underline underline-offset-2 decoration-2 decoration-link-900;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+    .pagefind-ui__result-excerpt {
+      @apply inline-block;
+      @apply font-normal text-sm text-neutral-700;
+      @apply mt-1 mb-0;
+      @apply min-w-72;
+
+      mark {
+        @apply bg-brand-300;
+      }
+    }
+  }
+
+  .pagefind-ui__loading {
+    color: var(--pagefind-ui-text);
+    background-color: var(--pagefind-ui-text);
+    border-radius: var(--pagefind-ui-border-radius);
+    opacity: 0.1;
+    pointer-events: none;
+  }
+
+  :root {
+    --pagefind-ui-scale: 0.8;
+    --pagefind-ui-primary: #393939;
+    --pagefind-ui-text: #393939;
+    --pagefind-ui-background: #ffffff;
+    --pagefind-ui-border: #eeeeee;
+    --pagefind-ui-tag: #eeeeee;
+    --pagefind-ui-border-width: 2px;
+    --pagefind-ui-border-radius: 8px;
+    --pagefind-ui-image-border-radius: 8px;
+    --pagefind-ui-image-box-ratio: 3 / 2;
+    --pagefind-ui-font: system, -apple-system, "BlinkMacSystemFont", ".SFNSText-Regular", "San Francisco", "Roboto",
+      "Segoe UI", "Helvetica Neue", "Lucida Grande", "Ubuntu", "arial", sans-serif;
+  }
+  .pagefind-ui__form {
+    @apply relative;
+  }
+
+  .pagefind-ui__search-input {
+    @apply relative flex w-full h-12;
+    @apply px-4 text-lg;
+    @apply bg-neutral-100 appearance-none;
+    @apply border border-neutral-300 shadow-xl shadow-neutral-200;
+    @apply rounded-xl;
+    @apply focus:outline-none focus:border-2 focus:border-neutral-500 focus:shadow-neutral-500/30;
+
+    &::placeholder {
+      @apply text-neutral-600;
+    }
+  }
+
+  .pagefind-ui__search-clear {
+    @apply absolute right-2 top-2;
+    @apply px-4 py-2;
+    @apply bg-neutral-300 text-neutral-900;
+    @apply hover:bg-neutral-400;
+    @apply font-medium text-xs;
+    @apply rounded-full;
+    @apply focus:outline-none focus:ring-4 ring-offset-4 focus:ring-neutral-500;
+  }
+
+  .pagefind-ui__drawer {
+    .pagefind-ui__results-area {
+      @apply mt-6;
+    }
+
+    .pagefind-ui__message {
+      @apply py-4;
+      @apply flex items-center;
+      @apply font-medium;
+    }
+  }
+</style>

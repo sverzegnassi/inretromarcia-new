@@ -16,5 +16,8 @@
     "exclude": [],
     "include": []
   },
+  "search": {
+    "enabled": true
+  },
   "socials": {}
 }

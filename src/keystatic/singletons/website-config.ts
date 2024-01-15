@@ -84,6 +84,14 @@ export default singleton({
             label: "Sitemap XML",
             description: "Personalizza le impostazioni per la generazione del file XML contenente informazioni strutturate sulle pagine del sito, facilitando l'indicizzazione da parte dei motori di ricerca."
         }),
+        search: fields.object({
+            enabled: fields.checkbox({
+                label: "Abilita ricerca dei contenuti",
+                description: "Consente agli utenti di cercare e trovare facilmente i contenuti pubblicati sul sito web."
+            }),
+        }, {
+            label: "Ricerca dei contenuti sul sito (Pagefind)"
+        }),
         socials: fields.object({
             facebook: fields.url({
                 label: "URL della pagina Facebook"

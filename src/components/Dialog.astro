@@ -1,0 +1,34 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+import Button from "./Button.astro";
+import TablerIcon from "./TablerIcon.astro";
+
+interface Props extends HTMLAttributes<"dialog"> {
+  id: string;
+};
+
+const { class: className, id, ...attrs } = Astro.props;
+---
+
+<dialog {...attrs} class:list={["dialog", className]} id={id}>
+  <slot />
+  <slot name="actions">
+    <Button size="sm" fullWidth="fullWidth" color="secondary" onclick={`document.getElementById('${id}').close()`} class="mt-8">
+      <TablerIcon iconName="x" class="size-6" />
+       Close
+    </Button>
+  </slot>
+</dialog>
+
+<style>
+  .dialog {
+    @apply min-w-64 px-8 py-6;
+    @apply rounded-2xl;
+    @apply border border-neutral-300 drop-shadow-xl;
+
+    &::backdrop {
+      @apply bg-neutral-900/35 backdrop-blur-[2px];
+    }
+  }
+</style>
